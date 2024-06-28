@@ -17,7 +17,7 @@ void PathfinderAgent::setPath(std::vector<BattlefieldCell*>* TargetPath)
 
 void PathfinderAgent::update()
 {
-	if (atDestination == false && clock.getElapsedTime().asSeconds())
+	if (atDestination == false && clock.getElapsedTime().asSeconds() > 1 / movesPerSecond)
 	{
 		BattlefieldCell* nextCell = path[0];
 
@@ -37,5 +37,7 @@ void PathfinderAgent::update()
 
 		if (path.size() == 0)
 			atDestination = true;
+
+		clock.restart();
 	}
 }
