@@ -45,7 +45,7 @@ int main()
         scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
         camera.Draw(scene.buildGameScene(&animationManager), inputState);
     }
-
-	return 0;
+    return 0;
 }
-// Test
+
+// Test push to remote repo again.
