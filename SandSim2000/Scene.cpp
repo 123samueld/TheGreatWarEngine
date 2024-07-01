@@ -59,6 +59,8 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
 				std::string spriteString = currentAgent->getSpriteString();
 				int spriteIndex = currentAgent->getSpriteIndex();
 
+				// interpolate the agents height towards the cells terrain height;
+				currentAgent->agentHeightAxis += (currentCell.YOffset - currentAgent->agentHeightAxis) * 0.1f;
 
 				//sf::Sprite objectSprite = *SpriteManager::GetInstance()->GetSprite(spriteString, spriteIndex);
 				sf::Sprite objectSprite = animationManager->getAgentSpriteFromDirection(currentAgent);
@@ -66,7 +68,7 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
 
 				sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentAgent->getPosX(), currentAgent->getPosY()));
 
-				objectSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
+				objectSprite.setPosition(isometricPosition.x, isometricPosition.y - currentAgent->agentHeightAxis);
 
 				sprites.push_back(objectSprite);
 			}
