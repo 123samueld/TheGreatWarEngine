@@ -71,7 +71,6 @@ void MobileAgent::updateCell(GameStateManager* gameStateManager)
 		BattlefieldCell* previousCell = gameStateManager->getCell(lastCellPosition.x, lastCellPosition.y);
 		BattlefieldCell* nextCell = gameStateManager->getCell(getPosXIndex(), getPosYIndex());
 
-		std::cout << velocity.x << ":" << velocity.y << "\n";
 		if(previousCell != nullptr && nextCell != nullptr)
 		{
 			previousCell->removeObject(this);
