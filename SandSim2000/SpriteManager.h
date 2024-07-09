@@ -13,7 +13,7 @@ public:
     // Update constructor to check terrainSpriteSheetList property to choose which terrain sprites to load, rather than the hard coded verison we've got right now.
     SpriteManager();
 
-    // void GetRequiredTerrainSpriteSheetsList();
+    // void SetRequiredTerrainSpriteSheetList();
 
     sf::Sprite* GetSprite(std::string spriteSheetID, int spriteIndex);
     SpriteSheet& GetSpriteSheet(std::string spriteSheetID);
