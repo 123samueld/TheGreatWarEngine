@@ -5,10 +5,15 @@
 void BattlefieldMap::initMap(unsigned int mapSize)
 {
     size = static_cast<int>(mapSize);
+    
+    // Move this "getter" into the initTerrainMap() method and add conditions to get only the terrain sprite sheets needed. 
     grass_spritesheet = SpriteManager::GetInstance()->GetSpriteSheet("GrassTerrain");
         
     initDepthMap();
     initDirectionMap();
+
+    //initTerrainMap();
+
     initSpriteMap();
 }
 
@@ -33,24 +38,6 @@ void BattlefieldMap::initDepthMap()
     depthMap[14] = new int[size]    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     depthMap[15] = new int[size]    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     
-    /*
-    depthMap[0] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[1] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[2] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[3] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[4] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[5] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[6] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[7] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[8] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[9] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[10] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[11] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[12] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[13] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[14] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[15] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    */
 }
 
 
@@ -75,25 +62,9 @@ void BattlefieldMap::initDirectionMap()
     directionMap[14] = new Direction[size]  { F, NW, W, W, W, W, W, W, W, W, W, W, W, W, SW, F };
     directionMap[15] = new Direction[size]  { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
     
-    /*
-    directionMap[0] = new Direction[size] { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[1] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[2] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[3] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[4] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[5] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[6] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[7] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[8] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[9] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[10] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[11] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[12] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[13] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[14] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[15] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    */
 }
+
+// void BattlefieldMap::initTerrainMap(){};
 
 int BattlefieldMap::testLocation(int x, int y, int height)
 {
@@ -195,6 +166,7 @@ std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
     return vertices;
 }
 
+// Add TerrainTypes to this destructor
 BattlefieldMap::~BattlefieldMap()
 {
     for (int i = 0; i < size; i++) {

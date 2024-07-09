@@ -11,6 +11,8 @@ enum Direction
 	F, N, NE, E, SE, S, SW, W, NW
 };
 
+//enum TerrainType {};
+
 class BattlefieldMap
 {
 public:
@@ -29,12 +31,18 @@ private:
 
 	int** depthMap = nullptr;
 	Direction** directionMap = nullptr;
+
+	//TerrainType** terrainType = nullptr;
+
 	sf::Sprite*** spriteMap = nullptr;
 
 	SpriteSheet grass_spritesheet;
 
 	void initDepthMap();
 	void initDirectionMap();
+
+	// void initTerrainMap();
+
 	void initSpriteMap();
 
 	int testLocation(int x, int y, int height);
