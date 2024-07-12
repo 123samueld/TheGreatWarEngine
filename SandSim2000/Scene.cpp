@@ -84,12 +84,22 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
 	for (auto iter = gameScene.begin(); iter != gameScene.end(); iter++)
 	{
 		BattlefieldCell currentCell = **iter;
-		sf::Sprite terrainSprite = *currentCell.terrainSprite;
+		//sf::Sprite terrainSprite = *currentCell.terrainSprite;
 
-		sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
+		for(int i = 0; i < currentCell.terrain.terrainTypes.size(); i++)
+		{
+			SpriteSheet& terrainSpriteSheet = SpriteManager::GetInstance()->GetSpriteSheet(currentCell.terrain.terrainTypes[i].name);
 
-		terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
-		sprites.push_back(terrainSprite);
+			sf::Sprite terrainSprite = *terrainSpriteSheet.getSprite(currentCell.terrain.spriteIndex);
+			terrainSprite.setTexture(terrainSpriteSheet.texture);
+
+			sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
+
+			terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
+			terrainSprite.setColor(sf::Color(255, 255, 255, 255 / currentCell.terrain.terrainTypes.size()));
+
+			sprites.push_back(terrainSprite);
+		}
 
 		if (currentCell.Objects.size() != 0)
 		{

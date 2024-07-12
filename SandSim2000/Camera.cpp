@@ -126,7 +126,7 @@ void Camera::snapPan(const InputState& inputState)
 
 void Camera::Draw(std::vector<sf::Sprite> sprites, const InputState& inputState)
 {
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color::White);
     int centerOffsetX = window.getSize().x / 2;
 
     for (sf::Sprite s : sprites)

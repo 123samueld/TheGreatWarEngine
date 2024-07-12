@@ -61,7 +61,7 @@ BattlefieldCell GameStateManager::generateCell(int x, int y)
     newCell.x = x;
     newCell.y = y;
     newCell.vertices = battlefieldMap.getVertices(x, y);
-    newCell.terrainSprite = battlefieldMap.getSpriteAtPosition({ x, y });
+    newCell.terrain = battlefieldMap.getTerrainInstanceAtPosition({ x, y });
     newCell.YOffset = battlefieldMap.getHeightAtPosition({ x, y }) * CELLSIZE / 4;
 
     return newCell;

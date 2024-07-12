@@ -5,16 +5,10 @@
 void BattlefieldMap::initMap(unsigned int mapSize)
 {
     size = static_cast<int>(mapSize);
-    
-    // Move this "getter" into the initTerrainMap() method and add conditions to get only the terrain sprite sheets needed. 
-    grass_spritesheet = SpriteManager::GetInstance()->GetSpriteSheet("GrassTerrain");
         
     initDepthMap();
     initDirectionMap();
-
-    //initTerrainMap();
-
-    initSpriteMap();
+    initTerrainMap();
 }
 
 void BattlefieldMap::initDepthMap()
@@ -64,28 +58,45 @@ void BattlefieldMap::initDirectionMap()
     
 }
 
-// void BattlefieldMap::initTerrainMap(){};
+void BattlefieldMap::initTerrainMap()
+{
+    terrainMap = new TerrainInstance* [size];
+
+    TerrainInstance grass = TerrainInstance(Grass);
+    TerrainInstance stone = TerrainInstance(Stone);
+    TerrainInstance grassStone = TerrainInstance(std::vector<TerrainType>({Grass, Stone}));
+
+    terrainMap[0] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
+    terrainMap[1] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
+    terrainMap[2] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
+    terrainMap[3] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
+    terrainMap[4] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
+    terrainMap[5] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
+    terrainMap[6] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
+    terrainMap[7] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
+    terrainMap[8] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[9] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[10] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[11] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[12] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[13] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[14] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[15] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+
+    for (int y = 0; y < size; y++)
+    {
+        for (int x = 0; x < size; x++)
+        {
+            terrainMap[y][x].setSpriteIndex(directionMap[y][x]);
+        }
+    }
+}
 
 int BattlefieldMap::testLocation(int x, int y, int height)
 {
     if (x > 0 && x < size - 1 && y > 0 && y < size - 1)
         return depthMap[y][x] - height;
     return 0;
-}
-
-void BattlefieldMap::initSpriteMap()
-{
-    spriteMap = new sf::Sprite ** [size];
-    for (int y = 0; y < size; y++)
-    {
-        spriteMap[y] = new sf::Sprite * [size];
-
-        for (int x = 0; x < size; x++)
-        {
-            spriteMap[y][x] = grass_spritesheet.getSprite(directionMap[y][x]);
-            spriteMap[y][x]->setTexture(grass_spritesheet.texture);
-        }
-    }
 }
 
 std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
@@ -172,9 +183,9 @@ BattlefieldMap::~BattlefieldMap()
     for (int i = 0; i < size; i++) {
         delete[] depthMap[i];
         delete[] directionMap[i];
-        delete[] spriteMap[i];
+        delete[] terrainMap[i];
     }
     delete[] depthMap;
     delete[] directionMap;
-    delete[] spriteMap;
+    delete[] terrainMap;
 }
