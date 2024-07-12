@@ -13,10 +13,36 @@ SpriteManager::SpriteManager()
 	spriteSheetList.push_back(std::make_pair("RedBaron", SpriteSheet("../resources/images/Flyers/The_Red_Baron/RedBaron.png", 3, 3)));
 	spriteSheetList.push_back(std::make_pair("Tree", SpriteSheet("../resources/images/Scenery/Tree.png", 1, 1)));
 	spriteSheetList.push_back(std::make_pair("PathfinderAgent", SpriteSheet("../resources/images/Flyers/The_Red_Baron/RedBaron.png", 3, 3)));
-	
-	spriteSheetList.push_back(std::make_pair("Grass", SpriteSheet("../resources/images/Terrain/Terrain Sprites/grass_spritesheet.png", 8, 2)));
-	spriteSheetList.push_back(std::make_pair("Stone", SpriteSheet("../resources/images/Terrain/Terrain Sprites/stone_spritesheet.png", 8, 2)));
-	spriteSheetList.push_back(std::make_pair("Water", SpriteSheet("../resources/images/Terrain/Terrain Sprites/water_spritesheet.png", 8, 2)));
+}
+
+void SpriteManager::SetRequiredTerrainSpriteSheetList(TerrainInstance** terrainMap, int mapSize)
+{
+	std::vector<std::string> loadedTerrain = std::vector<std::string>();
+
+	for (int i = 0; i < mapSize; i++)
+	{
+		for (int j = 0; j < mapSize; j++)
+		{
+			TerrainInstance terrain = terrainMap[i][j];
+			bool shouldAdd = true;
+			if (loadedTerrain.size() != 0)
+			{
+				for (int x = 0; x < loadedTerrain.size(); x++)
+				{
+					if (terrain.terrainTypes[0].name == loadedTerrain[x])
+						shouldAdd = false;
+				}
+			}
+			if(shouldAdd)
+			{
+				for (int y = 0; y < terrain.terrainTypes.size(); y++)
+				{
+					spriteSheetList.push_back(std::make_pair(terrain.terrainTypes[y].name, SpriteSheet(terrain.terrainTypes[y].spriteSheetFilePath.c_str(), 8, 2)));
+					loadedTerrain.push_back(terrain.terrainTypes[y].name);
+				}
+			}
+		}
+	}
 }
 
 sf::Sprite* SpriteManager::GetSprite(std::string spriteSheetID, int spriteIndex)

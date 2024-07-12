@@ -90,6 +90,7 @@ void BattlefieldMap::initTerrainMap()
             terrainMap[y][x].setSpriteIndex(directionMap[y][x]);
         }
     }
+    SpriteManager::GetInstance()->SetRequiredTerrainSpriteSheetList(terrainMap, size);
 }
 
 int BattlefieldMap::testLocation(int x, int y, int height)
