@@ -64,24 +64,24 @@ void BattlefieldMap::initTerrainMap()
 
     TerrainInstance grass = TerrainInstance(Grass);
     TerrainInstance stone = TerrainInstance(Stone);
-    TerrainInstance grassStone = TerrainInstance(std::vector<TerrainType>({Grass, Stone}));
+    TerrainInstance water = TerrainInstance(Water);
 
     terrainMap[0] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
     terrainMap[1] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
     terrainMap[2] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
     terrainMap[3] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
-    terrainMap[4] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
-    terrainMap[5] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
-    terrainMap[6] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
-    terrainMap[7] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
+    terrainMap[4] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
+    terrainMap[5] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
+    terrainMap[6] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[7] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
     terrainMap[8] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
     terrainMap[9] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
     terrainMap[10] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[11] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[12] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[13] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[14] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[15] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
+    terrainMap[11] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
+    terrainMap[12] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
+    terrainMap[13] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
+    terrainMap[14] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
+    terrainMap[15] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
 
     for (int y = 0; y < size; y++)
     {
