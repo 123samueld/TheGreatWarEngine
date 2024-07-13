@@ -86,19 +86,34 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
 		BattlefieldCell currentCell = **iter;
 		//sf::Sprite terrainSprite = *currentCell.terrainSprite;
 
+		SpriteSheet& baseTerrainSpriteSheet = SpriteManager::GetInstance()->GetSpriteSheet(currentCell.terrain.terrainTypes[0].name);
+
+		sf::Sprite baseTerrainSprite = *baseTerrainSpriteSheet.getSprite(currentCell.terrain.spriteIndex);
+		baseTerrainSprite.setTexture(baseTerrainSpriteSheet.texture);
+
+		sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
+
+		baseTerrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
+		baseTerrainSprite.setColor(sf::Color(255, 255, 255, 255));
+
+		sprites.push_back(baseTerrainSprite);
+
+		if(currentCell.terrain.terrainTypes.size() > 1)
 		for(int i = 0; i < currentCell.terrain.terrainTypes.size(); i++)
 		{
-			SpriteSheet& terrainSpriteSheet = SpriteManager::GetInstance()->GetSpriteSheet(currentCell.terrain.terrainTypes[i].name);
+			{
+				SpriteSheet& terrainSpriteSheet = SpriteManager::GetInstance()->GetSpriteSheet(currentCell.terrain.terrainTypes[i].name);
 
-			sf::Sprite terrainSprite = *terrainSpriteSheet.getSprite(currentCell.terrain.spriteIndex);
-			terrainSprite.setTexture(terrainSpriteSheet.texture);
+				sf::Sprite terrainSprite = *terrainSpriteSheet.getSprite(currentCell.terrain.spriteIndex);
+				terrainSprite.setTexture(terrainSpriteSheet.texture);
 
-			sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
+				sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
 
-			terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
-			terrainSprite.setColor(sf::Color(255, 255, 255, 255 / currentCell.terrain.terrainTypes.size()));
+				terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
+				terrainSprite.setColor(sf::Color(255, 255, 255, 255 / currentCell.terrain.terrainTypes.size()));
 
-			sprites.push_back(terrainSprite);
+				sprites.push_back(terrainSprite);
+			}
 		}
 
 		if (currentCell.Objects.size() != 0)
