@@ -1,11 +1,22 @@
 #include "BattlefieldMap.h"
+
 #include <cmath>
 #include <iostream>
 
 void BattlefieldMap::initMap(unsigned int mapSize)
 {
-    size = static_cast<int>(mapSize);
-        
+    std::ifstream mapDataFile("../resources/maps/map.json");
+
+    if (!mapDataFile.is_open())
+    {
+        std::cerr << "Unable to open the map file" << std::endl;
+        return;
+    }
+    mapDataFile >> mapData;
+    mapDataFile.close();
+
+    size = mapData["MapData"]["MapSize"][0];
+
     initDepthMap();
     initDirectionMap();
     initTerrainMap();
@@ -15,23 +26,14 @@ void BattlefieldMap::initDepthMap()
 {
     depthMap = new int* [size];
     
-    depthMap[0] = new int[size]     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[1] = new int[size]     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[2] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[3] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[4] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[5] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[6] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[7] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[8] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0};
-    depthMap[9] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0};
-    depthMap[10] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[11] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[12] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[13] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[14] = new int[size]    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[15] = new int[size]    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    
+    for (int i = 0; i < size; i++)
+    {
+        depthMap[i] = new int[size];
+        for (int j = 0; j < size; j++)
+        {
+            depthMap[i][j] = mapData["MapData"]["HeightMap"][i][j];
+        }
+    }
 }
 
 
@@ -58,41 +60,43 @@ void BattlefieldMap::initDirectionMap()
     
 }
 
-void BattlefieldMap::initTerrainMap()
-{
-    terrainMap = new TerrainInstance* [size];
+void BattlefieldMap::initTerrainMap() {
+    terrainMap = new TerrainInstance * [size];
+    for (int i = 0; i < size; ++i) {
+        terrainMap[i] = new TerrainInstance[size];
+        for (int j = 0; j < size; ++j) {
+            std::string terrainKey = mapData["MapData"]["TerrainMap"][i][j];
+            std::string thisTerrainTypeName;
 
-    TerrainInstance grass = TerrainInstance(Grass);
-    TerrainInstance stone = TerrainInstance(Stone);
-    TerrainInstance water = TerrainInstance(Water);
-    
-    TerrainInstance grassStone = TerrainInstance(std::vector<TerrainType>({Grass, Stone}));
-    TerrainInstance stoneWater = TerrainInstance(std::vector<TerrainType>({Water, Stone}));
+            if (mapData["MapData"]["RequiredTerrainTypes"].contains(terrainKey)) {
+                thisTerrainTypeName = mapData["MapData"]["RequiredTerrainTypes"][terrainKey];
+            }
+            else {
+                std::cerr << "Unknown terrain type key: " << terrainKey << std::endl;
+                continue;
+            }
 
-    terrainMap[0] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
-    terrainMap[1] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
-    terrainMap[2] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
-    terrainMap[3] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
-    terrainMap[4] = new TerrainInstance[size]{ grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass, grass };
-    terrainMap[5] = new TerrainInstance[size]{ grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone, grassStone };
-    terrainMap[6] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[7] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[8] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[9] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[10] = new TerrainInstance[size]{ stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone, stone };
-    terrainMap[11] = new TerrainInstance[size]{ stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater, stoneWater };
-    terrainMap[12] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
-    terrainMap[13] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
-    terrainMap[14] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
-    terrainMap[15] = new TerrainInstance[size]{ water, water, water, water, water, water, water, water, water, water, water, water, water, water, water, water };
+            bool found = false;
+            for (const auto& terrainType : terrainTypes) {
+                if (terrainType.name == thisTerrainTypeName) {
+                    terrainMap[i][j] = TerrainInstance(terrainType);
+                    found = true;
+                    break;
+                }
+            }
 
-    for (int y = 0; y < size; y++)
-    {
-        for (int x = 0; x < size; x++)
-        {
+            if (!found) {
+                std::cerr << "Unknown terrain type name: " << thisTerrainTypeName << std::endl;
+            }
+        }
+    }
+
+    for (int y = 0; y < size; ++y) {
+        for (int x = 0; x < size; ++x) {
             terrainMap[y][x].setSpriteIndex(directionMap[y][x]);
         }
     }
+
     SpriteManager::GetInstance()->SetRequiredTerrainSpriteSheetList(terrainMap, size);
 }
 
