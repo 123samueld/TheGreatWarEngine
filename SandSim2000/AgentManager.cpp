@@ -31,7 +31,7 @@ void AgentManager::onUpdate(
         mobileAgent->update(&gameStateManager);
     }
 
-    if (state.isLeftMouseButtonPressed && leftClick == false)
+    if (state.isLeftMouseButtonPressed && leftClick == false && pathfinderAgent != nullptr)
     {
         
         BattlefieldCell* targetCell = gameStateManager.getState().quadTree->getCell(gameStateManager.state.quadTree, state.selectedCell.x * 100, state.selectedCell.y * 100, 4);

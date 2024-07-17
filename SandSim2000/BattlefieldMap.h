@@ -15,7 +15,8 @@
 
 enum Direction
 {
-	F, N, NE, E, SE, S, SW, W, NW
+	F, N, NE, E, SE, S, SW, W, NW,
+	NIW, NIE, SIE, SIW
 };
 
 class BattlefieldMap
