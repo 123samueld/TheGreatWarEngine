@@ -40,24 +40,35 @@ void BattlefieldMap::initDepthMap()
 void BattlefieldMap::initDirectionMap()
 {
     directionMap = new Direction * [size];
-    
-    directionMap[0] = new Direction[size]   { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[1] = new Direction[size]   { F, NE, E, E, E, E, E, E, E, E, E, E, E, E, SE, F };
-    directionMap[2] = new Direction[size]   { F, N, NE, E, E, SE, F, F, F, F, F, F, F, F, S, F };
-    directionMap[3] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[4] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[5] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[6] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[7] = new Direction[size]   { F, N, NW, W, W, SW, F, F, F, NE, E, E, E, SE, S, F };
-    directionMap[8] = new Direction[size]   { F, N, F, F, F, F, F, F, F, N, F, F, F, S, S, F };
-    directionMap[9] = new Direction[size]   { F, N, F, F, F, F, F, F, F, N, F, F, F, S, S, F };
-    directionMap[10] = new Direction[size]  { F, N, F, F, F, F, F, F, F, NW, W, W, W, SW, S, F };
-    directionMap[11] = new Direction[size]  { F, N, F, F, F, F, F, F, F, F, F, F, F, F, S, F };
-    directionMap[12] = new Direction[size]  { F, N, F, F, F, F, F, F, F, F, F, F, F, F, S, F };
-    directionMap[13] = new Direction[size]  { F, N, F, F, F, F, F, F, F, F, F, F, F, F, S, F };
-    directionMap[14] = new Direction[size]  { F, NW, W, W, W, W, W, W, W, W, W, W, W, W, SW, F };
-    directionMap[15] = new Direction[size]  { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    
+
+    for (int i = 0; i < size; i++)
+    {
+        directionMap[i] = new Direction [size];
+        for (int j = 0; j < size; j++)
+        {
+            if(j < size - 1 && depthMap[i][j + 1] > depthMap[i][j])
+                directionMap[i][j] = N;
+            else if (j > 0 && depthMap[i][j - 1] > depthMap[i][j])
+                directionMap[i][j] = S;
+
+            else if (i < size - 1 && depthMap[i + 1][j] > depthMap[i][j])
+                directionMap[i][j] = E;
+            else if (i > 0 && depthMap[i - 1][j] > depthMap[i][j])
+                directionMap[i][j] = W;
+
+            else if(i < size - 1 && j < size - 1 && depthMap[i + 1][j + 1] > depthMap[i][j])
+                directionMap[i][j] = NE;
+            else if(i < size - 1 && j > 0 && depthMap[i + 1][j - 1] > depthMap[i][j])
+                directionMap[i][j] = SE;
+            else if (i > 0 && j > 0 && depthMap[i - 1][j - 1] > depthMap[i][j])
+                directionMap[i][j] = SW;
+            else if (i > 0 && j < size - 1 && depthMap[i - 1][j + 1] > depthMap[i][j])
+                directionMap[i][j] = NW;
+
+            else
+                directionMap[i][j] = F;
+        }
+    }
 }
 
 void BattlefieldMap::initTerrainMap() {
