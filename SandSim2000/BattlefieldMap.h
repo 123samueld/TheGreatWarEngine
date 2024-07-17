@@ -7,6 +7,8 @@
 #include <fstream>
 
 #include "SFML/Graphics.hpp"
+
+#include "GlobalConstants.h"
 #include "SpriteManager.h"
 #include "TerrainInstance.h"
 
@@ -30,17 +32,13 @@ public:
 	int size = 0;
 
 private:
-	TerrainType Grass = TerrainType("Grass", "../resources/images/Terrain/Terrain Sprites/grass_spritesheet.png");
-	TerrainType Stone = TerrainType("Stone", "../resources/images/Terrain/Terrain Sprites/stone_spritesheet.png");
-	TerrainType Water = TerrainType("Water", "../resources/images/Terrain/Terrain Sprites/water_spritesheet.png");
-
 	std::vector<TerrainType> terrainTypes = std::vector<TerrainType>(
 		{
 			TerrainType("Grass", "../resources/images/Terrain/Terrain Sprites/grass_spritesheet.png"),
 			TerrainType("Stone", "../resources/images/Terrain/Terrain Sprites/stone_spritesheet.png"),
 			TerrainType("Water", "../resources/images/Terrain/Terrain Sprites/water_spritesheet.png"),
 
-			TerrainType("GrassStone", "../resources/images/Terrain/Terrain Sprites/grass_spritesheet.png")
+			TerrainType("GrassStone", "../resources/images/Terrain/Terrain Sprites/grass_stone_spritesheet.png")
 		}
 	);
 
