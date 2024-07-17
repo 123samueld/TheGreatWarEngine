@@ -17,7 +17,6 @@ int main()
     Camera camera;
     Scene scene;
 
-    /*
     agentManager.placePathfinderAgent(sf::Vector2i(8, 8), &scene.gameScene, PathfinderAgent(8, 8, "PathfinderAgent"), gameStateManager);
     agentManager.placeMobileAgent(sf::Vector2i(8, 8), &scene.gameScene, MobileAgent(8, 8, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
@@ -25,7 +24,6 @@ int main()
     agentManager.placeScenery(sf::Vector2i(9, 8), &scene.gameScene, Tree(9, 8), gameStateManager);
     agentManager.placeScenery(sf::Vector2i(8, 7), &scene.gameScene, Tree(8, 7), gameStateManager);    
     agentManager.placeScenery(sf::Vector2i(8, 9), &scene.gameScene, Tree(8, 9), gameStateManager);    
-    */
 
     while (camera.window.isOpen())
     {
@@ -49,5 +47,3 @@ int main()
     }
     return 0;
 }
-
-// Test push to remote repo yet again.

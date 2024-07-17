@@ -131,6 +131,7 @@ std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
     std::vector<sf::Vector2i> vertices;
     int directionValue;
 
+    /*
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             if (i == y && j == x) {
@@ -139,7 +140,9 @@ std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
             }
         }
     }
-
+    */
+    
+    directionValue = directionMap[y][x];
     
     switch (directionValue)
     {
