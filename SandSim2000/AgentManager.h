@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <queue>
 #include <functional>
+#include <json.hpp>
+#include <fstream>
 
 #include "GlobalConstants.h"
 #include "GameStateManager.h"
@@ -32,6 +34,7 @@ public:
 	void placeMobileAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, MobileAgent agent, GameStateManager& gameStateManager);
 	void placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, PathfinderAgent agent, GameStateManager& gameStateManager);
 
+	void loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager);
 
 	PathfinderAgent* pathfinderAgent = nullptr;
 	MobileAgent* mobileAgent = nullptr;

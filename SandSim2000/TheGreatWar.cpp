@@ -8,16 +8,20 @@ int main()
     else if (selectedOption == MenuOption::MapEditor)
         std::cout << "Map Editor selected\n";
 
+    const char* currentMap = "../resources/maps/map.json";
+
     SpriteManager sprites = SpriteManager();
     AnimationManager animationManager;
-    GameStateManager gameStateManager = GameStateManager();
+    GameStateManager gameStateManager = GameStateManager(currentMap);
     AgentManager agentManager;
     InputState inputState;
     Camera camera;
     Scene scene;
 
-    agentManager.placePathfinderAgent(sf::Vector2i(8, 8), &scene.gameScene, PathfinderAgent(8, 8, "PathfinderAgent"), gameStateManager);
-    agentManager.placeMobileAgent(sf::Vector2i(8, 8), &scene.gameScene, MobileAgent(8, 8, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
+    agentManager.loadAgentsFromMap(currentMap, &scene.gameScene, gameStateManager);
+
+    agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
+    agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2, 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
     while (camera.window.isOpen())
     {

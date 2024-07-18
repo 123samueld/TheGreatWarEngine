@@ -1,11 +1,11 @@
 #include "GameStateManager.h"
 
-GameStateManager::GameStateManager() {
-    initializeBattlefieldVector();
+GameStateManager::GameStateManager(const char* mapFilepath) {
+    initializeBattlefieldVector(mapFilepath);
 }
 
-void GameStateManager::initialiseQuadTree(unsigned int& index) {
-    unsigned int mapSize = battlefieldMap.initMap();
+void GameStateManager::initialiseQuadTree(const char* mapFilepath, unsigned int& index) {
+    unsigned int mapSize = battlefieldMap.initMap(mapFilepath);
     state.quadTree = new QuadTree(sf::IntRect(0, 0, mapSize * GlobalConstants::cellSize, mapSize * GlobalConstants::cellSize), 0);
     generateQuadTree(state.quadTree, index);
 
@@ -74,10 +74,10 @@ BattlefieldCell* GameStateManager::getCell(int x, int y) {
     return nullptr;
 }
 
-void GameStateManager::initializeBattlefieldVector() 
+void GameStateManager::initializeBattlefieldVector(const char* mapFilepath) 
 {
     state.BattlefieldVector.clear();
     state.BattlefieldVector.resize(GlobalConstants::mapSize * GlobalConstants::mapSize); 
     unsigned int index = 0;
-    initialiseQuadTree(index);
+    initialiseQuadTree(mapFilepath, index);
 }

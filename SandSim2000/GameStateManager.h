@@ -11,10 +11,10 @@
 
 class GameStateManager {
 public:
-    GameStateManager();
+    GameStateManager(const char* mapFilepath);
 
-    void initialiseQuadTree(unsigned int& index);
-    void initializeBattlefieldVector();
+    void initialiseQuadTree(const char* mapFilepath, unsigned int& index);
+    void initializeBattlefieldVector(const char* mapFilepath);
 
 
     GameState& getState() { return state; }

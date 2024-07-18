@@ -5,6 +5,7 @@
 #include <iostream>
 #include <json.hpp>
 #include <fstream>
+#include <cmath>
 
 #include "SFML/Graphics.hpp"
 
@@ -28,7 +29,7 @@ public:
 	TerrainInstance getTerrainInstanceAtPosition(sf::Vector2i position) {return terrainMap[position.y][position.x]; }
 	int getHeightAtPosition(sf::Vector2i position) { return depthMap[position.y][position.x]; }
 
-	int initMap();
+	int initMap(const char* filepath);
 	std::vector<sf::Vector2i> getVertices(int x, int y);
 	int size = 0;
 

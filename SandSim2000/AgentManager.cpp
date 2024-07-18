@@ -38,7 +38,7 @@ void AgentManager::onUpdate(
         
         movementManager.SetUnitPath(pathfinderAgent, targetCell, &gameStateManager, state, scene, &camera);
 
-
+        std::cout << state.selectedCell.x << ":" << state.selectedCell.y << "\n";
 
         leftClick = true;
     }
@@ -105,4 +105,25 @@ void AgentManager::placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<
 
     pathfinderAgent = newAgent;
     pathfinderAgent->current = currentCell;
+}
+
+void AgentManager::loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager)
+{
+    std::ifstream mapDataFile(filepath);
+
+    if (!mapDataFile.is_open())
+    {
+        std::cerr << "missing filepath: " << filepath << std::endl;
+        return;
+    }
+    nlohmann::json mapData;
+    mapDataFile >> mapData;
+    mapDataFile.close();
+
+    std::cout << mapData["SceneryData"].size() << std::endl;
+    for (int i = 0; i < mapData["SceneryData"].size(); i++)
+    {
+        sf::Vector2i position = sf::Vector2i(mapData["SceneryData"][i]["position"][0], mapData["SceneryData"][i]["position"][1]);
+        placeScenery(position, gameScene, Scenery(position.x, position.y, mapData["SceneryData"][i]["AgentType"]), gameStateManager);
+    }
 }

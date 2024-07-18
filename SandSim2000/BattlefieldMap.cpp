@@ -1,11 +1,8 @@
 #include "BattlefieldMap.h"
 
-#include <cmath>
-#include <iostream>
-
-int BattlefieldMap::initMap()
+int BattlefieldMap::initMap(const char* filepath)
 {
-    std::ifstream mapDataFile("../resources/maps/map.json");
+    std::ifstream mapDataFile(filepath);
 
     if (!mapDataFile.is_open())
     {
