@@ -6,7 +6,7 @@ Scene::Scene() {}
 
 void Scene::UpdateGameScene(Camera& cam, GameState& gameState, InputState& inputState) {
 	GridGenerator gridGenerator;
-	sf::IntRect viewbounds(0, 0, cam.window.getSize().x, cam.window.getSize().y);
+	sf::IntRect viewbounds(-GlobalConstants::cellSize, 0, cam.window.getSize().x + GlobalConstants::cellSize, cam.window.getSize().y + GlobalConstants::cellSize);
 
 	gameScene.clear();
 	findViewportIterators(gameState.quadTree, cam, gridGenerator, viewbounds);
