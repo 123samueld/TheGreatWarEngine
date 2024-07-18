@@ -7,6 +7,7 @@
 #include <functional>
 #include <json.hpp>
 #include <fstream>
+#include <vector>
 
 #include "GlobalConstants.h"
 #include "GameStateManager.h"
@@ -37,7 +38,7 @@ public:
 	void loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager);
 
 	PathfinderAgent* pathfinderAgent = nullptr;
-	MobileAgent* mobileAgent = nullptr;
+	std::vector<MobileAgent*> mobileAgent = std::vector<MobileAgent*>();
 private:
 	bool leftClick = false;
 	bool rightClick = false;
