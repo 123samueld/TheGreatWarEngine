@@ -26,7 +26,6 @@ int main()
     for(int i = 0; i < 5; i++)
         agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2 - numberOfAgents / 2 + i, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
-    sf::Clock timer;
     int count = 0;
     while (camera.window.isOpen())
     {
@@ -41,19 +40,38 @@ int main()
         if(inputState.isTPressed)
             agentManager.placeScenery(inputState.selectedCell, &scene.gameScene, Tree(inputState.selectedCell.x, inputState.selectedCell.y), gameStateManager);
 
+        sf::Clock timer;
         agentManager.onUpdate(inputState, &scene.gameScene, gameStateManager, camera, scene);
-
         if (!camera.Update(inputState))
             break;
-        scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
-        camera.Draw(scene.buildGameScene(&animationManager), inputState);
 
-        count += 1;
-        if (timer.getElapsedTime().asSeconds() > 1)
+        bool output = sf::Mouse::isButtonPressed(sf::Mouse::Button::Right);
+
+
+        timer.restart();
+
+        scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
+        if(output)
         {
-            std::cout << count << " frames per second\n";
+            std::cout << timer.getElapsedTime().asMicroseconds() << " SCENE::UPDATEGAMESCENE\n";
             timer.restart();
-            count = 0;
+        }
+
+        std::vector<sf::Sprite> spriteMap = scene.buildGameScene(&animationManager);
+        if(output)
+        {
+            std::cout << timer.getElapsedTime().asMicroseconds() << " SCENE::BUILDGAMESCENE\n";
+            timer.restart();
+        }
+
+
+        camera.Draw(spriteMap, inputState);
+        if(output)
+        {
+            std::cout << timer.getElapsedTime().asMicroseconds() << " CAMERA::DRAW\n";
+            timer.restart();
+
+            std::cout << "------------------------------------------------\n";
         }
     }
     return 0;

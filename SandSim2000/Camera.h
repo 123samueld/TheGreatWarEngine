@@ -15,7 +15,7 @@ public:
     Camera();
 
     bool Update(InputState& state);
-    void Draw(std::vector<sf::Sprite> sprites, const InputState& state);
+    void Draw(std::vector<sf::Sprite>& sprites, const InputState& state);
 
     void WorldToScreen(float worldX, float worldY, int& outScreenX, int& outScreenY);
     void ScreenToWorld(int screenX, int screenY, float& outWorldX, float& outWorldY);

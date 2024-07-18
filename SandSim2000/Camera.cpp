@@ -124,19 +124,19 @@ void Camera::snapPan(const InputState& inputState)
     //Once there are scenery and units on the battlefield, snap panning should be done via hotkeys, snapping the camera to the position of a unit.
 }
 
-void Camera::Draw(std::vector<sf::Sprite> sprites, const InputState& inputState)
+void Camera::Draw(std::vector<sf::Sprite>& sprites, const InputState& inputState)
 {
     window.clear(sf::Color::White);
     int centerOffsetX = window.getSize().x / 2;
 
-    for (sf::Sprite s : sprites)
+    for (int i = 0; i < sprites.size(); i++)
     {
 
-        WorldToScreen(s.getPosition().x + centerOffsetX, s.getPosition().y, screenX, screenY);
-        s.setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
-        s.setScale(static_cast<float>(scaleX), static_cast<float>(scaleY));
+        WorldToScreen(sprites[i].getPosition().x + centerOffsetX, sprites[i].getPosition().y, screenX, screenY);
+        sprites[i].setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
+        sprites[i].setScale(static_cast<float>(scaleX), static_cast<float>(scaleY));
 
-        window.draw(s);
+        window.draw(sprites[i]);
     }
 
     ScreenToWorld(inputState.mousePosition.x - (window.getSize().x/2) - 50, inputState.mousePosition.y - 100, worldX, worldY);
