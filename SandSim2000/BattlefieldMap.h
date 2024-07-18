@@ -28,7 +28,7 @@ public:
 	TerrainInstance getTerrainInstanceAtPosition(sf::Vector2i position) {return terrainMap[position.y][position.x]; }
 	int getHeightAtPosition(sf::Vector2i position) { return depthMap[position.y][position.x]; }
 
-	void initMap(unsigned int mapSize);
+	int initMap();
 	std::vector<sf::Vector2i> getVertices(int x, int y);
 	int size = 0;
 

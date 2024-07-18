@@ -6,6 +6,6 @@ public:
     static const int terrainSpiteWidth = 100;
     static const int terrainSpiteHeight = 100;
     static const int quadTreeDepth = 5;
-    static const int mapSize = 16;
+    static const int mapSize = 64;
     
 };

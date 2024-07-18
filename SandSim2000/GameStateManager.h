@@ -11,10 +11,10 @@
 
 class GameStateManager {
 public:
-    GameStateManager(unsigned int numCells);
+    GameStateManager();
 
-    void initialiseQuadTree(unsigned int battlefieldSize, unsigned int& index);
-    void initializeBattlefieldVector(unsigned int numCells);
+    void initialiseQuadTree(unsigned int& index);
+    void initializeBattlefieldVector();
 
 
     GameState& getState() { return state; }

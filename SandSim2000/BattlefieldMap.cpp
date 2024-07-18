@@ -3,14 +3,14 @@
 #include <cmath>
 #include <iostream>
 
-void BattlefieldMap::initMap(unsigned int mapSize)
+int BattlefieldMap::initMap()
 {
     std::ifstream mapDataFile("../resources/maps/map.json");
 
     if (!mapDataFile.is_open())
     {
         std::cerr << "Unable to open the map file" << std::endl;
-        return;
+        return 1;
     }
     mapDataFile >> mapData;
     mapDataFile.close();
@@ -20,6 +20,8 @@ void BattlefieldMap::initMap(unsigned int mapSize)
     initDepthMap();
     initDirectionMap();
     initTerrainMap();
+
+    return size;
 }
 
 void BattlefieldMap::initDepthMap()

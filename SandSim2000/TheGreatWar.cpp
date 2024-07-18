@@ -10,8 +10,7 @@ int main()
 
     SpriteManager sprites = SpriteManager();
     AnimationManager animationManager;
-    unsigned int mapSize = 16;
-    GameStateManager gameStateManager = GameStateManager(mapSize * mapSize);
+    GameStateManager gameStateManager = GameStateManager();
     AgentManager agentManager;
     InputState inputState;
     Camera camera;

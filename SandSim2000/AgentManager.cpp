@@ -24,7 +24,7 @@ void AgentManager::onUpdate(
 
 
         std::vector<Agent*> agents = std::vector<Agent*>();
-        gameStateManager.getState().quadTree->getAgentsInRadius(gameStateManager.getState().quadTree, pathfinderAgent->getPosXIndex() * 100, pathfinderAgent->getPosYIndex() * 100, 200, 4, &agents);
+        gameStateManager.getState().quadTree->getAgentsInRadius(gameStateManager.getState().quadTree, pathfinderAgent->getPosXIndex() * GlobalConstants::cellSize, pathfinderAgent->getPosYIndex() * GlobalConstants::cellSize, GlobalConstants::cellSize * 2, GlobalConstants::quadTreeDepth, &agents);
     }
     if (mobileAgent != nullptr)
     {
@@ -33,8 +33,8 @@ void AgentManager::onUpdate(
 
     if (state.isLeftMouseButtonPressed && leftClick == false && pathfinderAgent != nullptr)
     {
-        
-        BattlefieldCell* targetCell = gameStateManager.getState().quadTree->getCell(gameStateManager.state.quadTree, state.selectedCell.x * 100, state.selectedCell.y * 100, 4);
+        GameState& gamestate = gameStateManager.getState();
+        BattlefieldCell* targetCell = gameStateManager.getCell(state.selectedCell.x, state.selectedCell.y);
         
         movementManager.SetUnitPath(pathfinderAgent, targetCell, &gameStateManager, state, scene, &camera);
 
@@ -65,7 +65,6 @@ void AgentManager::placeScenery(sf::Vector2i isometricCell, std::set<std::vector
 
         gameStateManager.getState().Units.push_back(tree);
 
-        gameStateManager.getState().quadTree->insert(tree, 100);
         gameStateManager.getState().quadTree->insert(tree, constants.cellSize);
 
         BattlefieldCell* cell = gameStateManager.getCell(isometricCell.x, isometricCell.y);
