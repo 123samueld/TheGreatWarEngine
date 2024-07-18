@@ -21,8 +21,12 @@ int main()
     agentManager.loadAgentsFromMap(currentMap, &scene.gameScene, gameStateManager);
 
     agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
-    agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2, 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
+    for(int i = 0; i < 10; i++)
+        agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2, 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
+
+    sf::Clock timer;
+    int count = 0;
     while (camera.window.isOpen())
     {
         inputState = InputStateManager::getInstance().updateInputState(camera.window, inputState);
@@ -42,6 +46,14 @@ int main()
             break;
         scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
         camera.Draw(scene.buildGameScene(&animationManager), inputState);
+
+        count += 1;
+        if (timer.getElapsedTime().asSeconds() > 1)
+        {
+            std::cout << count << " frames per second\n";
+            timer.restart();
+            count = 0;
+        }
     }
     return 0;
 }
