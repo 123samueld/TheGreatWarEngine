@@ -119,7 +119,6 @@ void AgentManager::loadAgentsFromMap(const char* filepath, std::set<std::vector<
     mapDataFile >> mapData;
     mapDataFile.close();
 
-    std::cout << mapData["SceneryData"].size() << std::endl;
     for (int i = 0; i < mapData["SceneryData"].size(); i++)
     {
         sf::Vector2i position = sf::Vector2i(mapData["SceneryData"][i]["position"][0], mapData["SceneryData"][i]["position"][1]);
