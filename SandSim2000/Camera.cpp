@@ -129,30 +129,19 @@ void Camera::Draw(std::vector<sf::Sprite>& sprites, const InputState& inputState
     window.clear(sf::Color::White);
     int centerOffsetX = window.getSize().x / 2;
 
-    for (int i = 0; i < sprites.size(); i++)
+    for (auto& sprite : sprites)
     {
-
-        WorldToScreen(sprites[i].getPosition().x + centerOffsetX, sprites[i].getPosition().y, screenX, screenY);
-        sprites[i].setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
-        sprites[i].setScale(static_cast<float>(scaleX), static_cast<float>(scaleY));
-
-        window.draw(sprites[i]);
+        auto position = sprite.getPosition();
+        WorldToScreen(position.x + centerOffsetX, position.y, screenX, screenY);
+        sprite.setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
+        window.draw(sprite);
     }
 
-    ScreenToWorld(inputState.mousePosition.x - (window.getSize().x/2) - 50, inputState.mousePosition.y - 100, worldX, worldY);
+    ScreenToWorld(inputState.mousePosition.x - (window.getSize().x / 2) - 50, inputState.mousePosition.y - 100, worldX,
+                  worldY);
 
-    sf::Font font;
-    if (!font.loadFromFile("../resources/fonts/Diamond Gothic.ttf")) {
-        std::cerr << "Failed to load font!" << std::endl;
-    }
-    sf::Text text1;
-    text1.setFont(font); 
-
-    text1.setString("Mouse Grid (X: " + std::to_string(inputState.selectedCell.x) + ", Y: " + std::to_string(inputState.selectedCell.y) + ")");
-    text1.setCharacterSize(24);
-    text1.setFillColor(sf::Color::White); 
-    text1.setPosition(10, 10); 
-
+    text1.setString("Mouse Grid (X: " + std::to_string(inputState.selectedCell.x) +
+                    ", Y: " + std::to_string(inputState.selectedCell.y) + ")");
     window.draw(text1);
 
     window.display();

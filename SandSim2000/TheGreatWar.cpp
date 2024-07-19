@@ -16,7 +16,8 @@ int main()
     AgentManager agentManager;
     InputState inputState;
     Camera camera;
-    Scene scene;
+    GridGenerator gridGenerator;
+    Scene scene(gridGenerator); 
 
     agentManager.loadAgentsFromMap(currentMap, &scene.gameScene, gameStateManager);
 
@@ -37,18 +38,29 @@ int main()
                 camera.window.close();
             }
         }
-        if(inputState.isTPressed)
-            agentManager.placeScenery(inputState.selectedCell, &scene.gameScene, Tree(inputState.selectedCell.x, inputState.selectedCell.y), gameStateManager);
-
         sf::Clock timer;
-        agentManager.onUpdate(inputState, &scene.gameScene, gameStateManager, camera, scene);
-        if (!camera.Update(inputState))
-            break;
-
+        timer.restart();
         bool output = sf::Mouse::isButtonPressed(sf::Mouse::Button::Right);
 
+        agentManager.onUpdate(inputState, &scene.gameScene, gameStateManager, camera, scene);
+        if (output)
+        {
+            std::cout << timer.getElapsedTime().asMicroseconds() << " agentManager::onUpdate\n";
+            timer.restart();
+        }
 
-        timer.restart();
+        if (!camera.Update(inputState))
+            break;
+        if (output)
+        {
+            std::cout << timer.getElapsedTime().asMicroseconds() << " camera::Update\n";
+            timer.restart();
+        }
+
+
+
+
+        
 
         scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
         if(output)
