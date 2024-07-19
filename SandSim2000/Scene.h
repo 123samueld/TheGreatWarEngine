@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 
+
 #include "GhostGrid.h"
 #include "BattlefieldCell.h"
 #include "AnimationManager.h"
@@ -38,6 +39,11 @@ private:
 	GridGenerator& gridGenerator; 
 	void findViewportIterators(QuadTree* root, Camera& cam, GridGenerator& gridGenerator, sf::IntRect& viewbounds);
 	 
+	std::vector<sf::Sprite> spritePool;
+    size_t spritePoolIndex = 0;
+
+    sf::Sprite& getOrCreateSprite();
+
 	float scaleX = 1.f;
     float scaleY = 1.f;
 };

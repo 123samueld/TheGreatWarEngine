@@ -1,6 +1,8 @@
 #include "Scene.h"
 #define MAX_TILE_DEPTH 5
 #define TILE_SIZE 100
+const size_t SPRITE_POOL_SIZE = 1300;
+
 
 void Scene::UpdateGameScene(Camera& cam, GameState& gameState, InputState& inputState)
 {
@@ -75,10 +77,26 @@ void Scene::findViewportIterators(QuadTree* root, Camera& cam, GridGenerator& gr
 	}
 }
 
+sf::Sprite& Scene::getOrCreateSprite()
+{
+    // If the pool index exceeds the pool size, reset it.
+    if (spritePoolIndex >= spritePool.size())
+    {
+        spritePoolIndex = 0;
+    }
+    return spritePool[spritePoolIndex++];
+}
+
 std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager)
 {
     std::vector<sf::Sprite> sprites;
-    std::unordered_map<std::string, SpriteSheet*> spriteSheetsCache;  // Cache for SpriteSheet objects
+    std::unordered_map<std::string, SpriteSheet*> spriteSheetsCache;
+
+    // Initialize sprite pool if empty
+    if (spritePool.empty())
+    {
+        spritePool.resize(SPRITE_POOL_SIZE);
+    }
 
     for (auto iter = gameScene.begin(); iter != gameScene.end(); iter++)
     {
@@ -89,7 +107,6 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
         {
             const auto& terrainTypeName = terrainTypes[i].name;
 
-            // Cache SpriteSheet objects to avoid repeated lookups
             auto spriteSheetIter = spriteSheetsCache.find(terrainTypeName);
             if (spriteSheetIter == spriteSheetsCache.end())
             {
@@ -100,45 +117,40 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
             }
             SpriteSheet* spriteSheet = spriteSheetIter->second;
 
-            // Create sprite and set properties
-            sf::Sprite terrainSprite = *spriteSheet->getSprite(currentCell.terrain.spriteIndex);
+            sf::Sprite& terrainSprite = getOrCreateSprite();
+            terrainSprite = *spriteSheet->getSprite(currentCell.terrain.spriteIndex);
             terrainSprite.setTexture(spriteSheet->texture);
-            terrainSprite.setScale(scaleX, scaleY);  // Set scale here
+            terrainSprite.setScale(scaleX, scaleY);
 
-            // Reuse isometricPosition vector to minimize object creation
             sf::Vector2f isometricPosition =
                 gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
             terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
             terrainSprite.setColor(sf::Color(255, 255, 255, 255 / static_cast<int>(terrainTypes.size())));
 
-            // Add sprite to the list
             sprites.push_back(terrainSprite);
         }
 
-        // Process objects in the cell
         if (!currentCell.Objects.empty())
         {
             for (Agent* currentAgent : currentCell.Objects)
             {
-                // Interpolate agent height towards the cell's terrain height
                 currentAgent->agentHeightAxis += (currentCell.YOffset - currentAgent->agentHeightAxis) * 0.1f;
 
-                // Create object sprite and set properties
-                sf::Sprite objectSprite = animationManager->getAgentSpriteFromDirection(currentAgent);
+                sf::Sprite& objectSprite = getOrCreateSprite();
+                objectSprite = animationManager->getAgentSpriteFromDirection(currentAgent);
                 objectSprite.setTexture(
                     SpriteManager::GetInstance()->GetSpriteSheet(currentAgent->getSpriteString()).texture);
-                objectSprite.setScale(scaleX, scaleY);  // Set scale here
+                objectSprite.setScale(scaleX, scaleY);
 
-                // Reuse isometricPosition vector to minimize object creation
                 sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(
                     sf::Vector2f(currentAgent->getPosX(), currentAgent->getPosY()));
                 objectSprite.setPosition(isometricPosition.x, isometricPosition.y - currentAgent->agentHeightAxis);
 
-                // Add sprite to the list
                 sprites.push_back(objectSprite);
             }
         }
     }
+
     return sprites;
 }
 
