@@ -2,7 +2,7 @@
 
 Camera::Camera()
     : window(sf::VideoMode::getDesktopMode(), "The Great War", sf::Style::Fullscreen) {
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(0);
     window.setVerticalSyncEnabled(true);
     window.setMouseCursorGrabbed(true);
 
