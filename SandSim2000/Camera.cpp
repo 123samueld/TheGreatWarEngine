@@ -128,17 +128,16 @@ void Camera::Draw(std::vector<sf::Sprite>& sprites, const InputState& inputState
 {
     window.clear(sf::Color::White);
     int centerOffsetX = window.getSize().x / 2;
-
+    sf::Vector2f position;
     for (auto& sprite : sprites)
     {
-        auto position = sprite.getPosition();
+        position = sprite.getPosition();
         WorldToScreen(position.x + centerOffsetX, position.y, screenX, screenY);
         sprite.setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
         window.draw(sprite);
     }
 
-    ScreenToWorld(inputState.mousePosition.x - (window.getSize().x / 2) - 50, inputState.mousePosition.y - 100, worldX,
-                  worldY);
+    ScreenToWorld(inputState.mousePosition.x - (window.getSize().x / 2) - 50, inputState.mousePosition.y - 100, worldX, worldY);
 
     text1.setString("Mouse Grid (X: " + std::to_string(inputState.selectedCell.x) +
                     ", Y: " + std::to_string(inputState.selectedCell.y) + ")");

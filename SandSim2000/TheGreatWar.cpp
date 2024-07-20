@@ -23,9 +23,9 @@ int main()
 
     agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
 
-    int numberOfAgents = 4;
-    for(int i = 0; i < 5; i++)
-        agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2 - numberOfAgents / 2 + i, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
+    int numberOfAgents = 10;
+    for(int i = 0; i < numberOfAgents; i++)
+        agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
     int count = 0;
     while (camera.window.isOpen())

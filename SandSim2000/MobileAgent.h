@@ -13,7 +13,7 @@
 class MobileAgent : public Agent
 {
 public:
-	MobileAgent(int initialPosX, int initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, sf::String basicUnitType) : Agent(initialPosX, initialPosY, initialHealth, initialArmour, initialSpeed, initialBallisticSkill, true, basicUnitType) { lastCellPosition = sf::Vector2i(initialPosX, initialPosY); }
+	MobileAgent(int initialPosX, int initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, sf::String basicUnitType) : Agent(initialPosX, initialPosY, initialHealth, initialArmour, initialSpeed, initialBallisticSkill, true, basicUnitType) { lastCellPosition = sf::Vector2i(initialPosX, initialPosY); isMobileAgent = true; }
 
 	void update(GameStateManager* gameStateManager);
 private:
@@ -32,8 +32,15 @@ private:
 
 	sf::Vector2f normalize(sf::Vector2f value);
 	PathfinderAgent* getPathfinderFromList();
-	GlobalConstants constants;
 
 	sf::Vector2i lastCellPosition;
+
+	float rangeCheck = 4;
+	float tooCloseToAgent = 1.4f;
+	float tooCloseToScenery = 0.9f;
+
+	float avoidFactor = 0.07f;
+	float coherenceFactor = 0.04f;
+	float alighnmentFactor = 0.05f;
 };
 

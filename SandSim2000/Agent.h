@@ -49,6 +49,7 @@ public:
 
     std::string getSpriteString() { return unitType; }
     int getSpriteIndex() { return spriteIndex; }
+    bool isMobileAgent = false;
 
     float agentHeightAxis = 0;
 };
