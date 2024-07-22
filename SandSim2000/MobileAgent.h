@@ -39,7 +39,7 @@ private:
 	float tooCloseToAgent = 1.4f;
 	float tooCloseToScenery = 0.9f;
 
-	float avoidFactor = 0.07f;
+	float avoidFactor = 0.1f;
 	float coherenceFactor = 0.04f;
 	float alighnmentFactor = 0.05f;
 };

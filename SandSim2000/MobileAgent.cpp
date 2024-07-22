@@ -102,7 +102,7 @@ void MobileAgent::ClampVelocity()
 
 void MobileAgent::updateCurrentSpriteDirection()
 {
-	float spriteBarrier = speed * 0.77f;
+	float spriteBarrier = speed * 0.3f;
 
 	if (velocity.x > spriteBarrier) currentDirection.x = 1;
 	if (velocity.x < -spriteBarrier) currentDirection.x = -1;
