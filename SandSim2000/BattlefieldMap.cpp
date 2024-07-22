@@ -38,23 +38,25 @@ void BattlefieldMap::initDepthMap()
 
 void BattlefieldMap::initDirectionMap()
 {
-    directionMap = new Direction * [size];
+    directionMap = new Direction*[size];
 
     for (int i = 0; i < size; i++)
     {
-        directionMap[i] = new Direction [size];
+        directionMap[i] = new Direction[size];
         for (int j = 0; j < size; j++)
         {
-            if(i > 0 && j < size - 1 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
+            if (i > 0 && j < size - 1 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
                 directionMap[i][j] = NIW;
-            else if(i < size - 1 && j < size - 1 && (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
+            else if (i < size - 1 && j < size - 1 &&
+                     (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
                 directionMap[i][j] = NIE;
-            else if(i < size - 1 && j > 0 && (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
+            else if (i < size - 1 && j > 0 &&
+                     (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
                 directionMap[i][j] = SIE;
-            else if(i > 0 && j > 0 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
+            else if (i > 0 && j > 0 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
                 directionMap[i][j] = SIW;
 
-            else if(j < size - 1 && depthMap[i][j + 1] > depthMap[i][j])
+            else if (j < size - 1 && depthMap[i][j + 1] > depthMap[i][j])
                 directionMap[i][j] = N;
             else if (j > 0 && depthMap[i][j - 1] > depthMap[i][j])
                 directionMap[i][j] = S;
@@ -63,9 +65,9 @@ void BattlefieldMap::initDirectionMap()
             else if (i > 0 && depthMap[i - 1][j] > depthMap[i][j])
                 directionMap[i][j] = W;
 
-            else if(i < size - 1 && j < size - 1 && depthMap[i + 1][j + 1] > depthMap[i][j])
+            else if (i < size - 1 && j < size - 1 && depthMap[i + 1][j + 1] > depthMap[i][j])
                 directionMap[i][j] = NE;
-            else if(i < size - 1 && j > 0 && depthMap[i + 1][j - 1] > depthMap[i][j])
+            else if (i < size - 1 && j > 0 && depthMap[i + 1][j - 1] > depthMap[i][j])
                 directionMap[i][j] = SE;
             else if (i > 0 && j > 0 && depthMap[i - 1][j - 1] > depthMap[i][j])
                 directionMap[i][j] = SW;

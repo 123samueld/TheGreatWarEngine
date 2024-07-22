@@ -23,7 +23,7 @@ int main()
 
     agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
 
-    int numberOfAgents = 500;
+    int numberOfAgents = 10;
     for(int i = 0; i < numberOfAgents; i++)
         agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
@@ -41,7 +41,8 @@ int main()
         }
 
         agentManager.onUpdate(inputState, &scene.gameScene, gameStateManager, camera, scene);
-        camera.Update(inputState);
+        if (!camera.Update(inputState))
+            break;
         scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
         std::vector<sf::Sprite> spriteMap = scene.buildGameScene(&animationManager);
         camera.Draw(spriteMap, inputState);
