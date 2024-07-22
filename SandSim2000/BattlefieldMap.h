@@ -17,7 +17,7 @@
 enum Direction
 {
 	F, N, NE, E, SE, S, SW, W, NW,
-	NIW, NIE, SIE, SIW
+	NIW, NIE, SIE, SIW, P
 };
 
 class BattlefieldMap
@@ -39,6 +39,7 @@ private:
 			TerrainType("Grass", "../resources/images/Terrain/Terrain Sprites/grass_spritesheet.png"),
 			TerrainType("Stone", "../resources/images/Terrain/Terrain Sprites/stone_spritesheet.png"),
 			TerrainType("Water", "../resources/images/Terrain/Terrain Sprites/water_spritesheet.png"),
+			TerrainType("Snow", "../resources/images/Terrain/Terrain Sprites/snow_spritesheet.png"),
 
 			TerrainType("GrassStone", "../resources/images/Terrain/Terrain Sprites/grass_stone_spritesheet.png")
 		}

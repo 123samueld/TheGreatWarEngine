@@ -55,10 +55,22 @@ void AgentManager::onUpdate(
     }
 }
 
-
 void AgentManager::placeScenery(sf::Vector2i isometricCell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, Scenery sceneObject, GameStateManager& gameStateManager)
 {
     if (sceneObject.getUnitType() == "Tree")
+    {
+        Tree* tree = new Tree(isometricCell.x, isometricCell.y);
+
+        gameStateManager.getState().Units.push_back(tree);
+
+        gameStateManager.getState().quadTree->insert(tree, constants.cellSize);
+
+        BattlefieldCell* cell = gameStateManager.getCell(isometricCell.x, isometricCell.y);
+
+        if (cell != nullptr)
+            cell->impassableTerrain = true;
+    }
+    else if (sceneObject.getUnitType() == "Snow_Pine")
     {
         Tree* tree = new Tree(isometricCell.x, isometricCell.y);
 
