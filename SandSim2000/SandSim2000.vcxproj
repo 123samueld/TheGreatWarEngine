@@ -145,6 +145,7 @@
     <ClCompile Include="AssetCRUDManager.cpp" />
     <ClCompile Include="BattlefieldMap.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Formation.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GridGenerator.cpp" />
     <ClCompile Include="Infantry.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="BattlefieldCell.h" />
     <ClInclude Include="BattlefieldMap.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Formation.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="GhostGrid.h" />
