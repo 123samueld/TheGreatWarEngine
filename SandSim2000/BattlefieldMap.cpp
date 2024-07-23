@@ -21,6 +21,13 @@ int BattlefieldMap::initMap(const char* filepath)
     return size;
 }
 
+int imin(int val1, int val2)
+{
+    if(val1 < val2)
+        return val1;
+    return val2;
+}
+
 void BattlefieldMap::initDepthMap()
 {
     depthMap = new int* [size];
@@ -30,7 +37,7 @@ void BattlefieldMap::initDepthMap()
         depthMap[i] = new int[size];
         for (int j = 0; j < size; j++)
         {
-            depthMap[i][j] = mapData["MapData"]["HeightMap"][i][j];
+            depthMap[i][j] = imin(mapData["MapData"]["HeightMap"][i][j], GlobalConstants::maxMapHeight);
         }
     }
 }
@@ -45,7 +52,27 @@ void BattlefieldMap::initDirectionMap()
         directionMap[i] = new Direction[size];
         for (int j = 0; j < size; j++)
         {
-            if (i > 0 && j < size - 1 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
+            if ((i > 0 && i < size - 1 && j > 0 && j < size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == 0 && j == 0) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if((i == 0 && j == size - 1) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == size - 1 && j == 0) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == size - 1 && j == size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+
+            else if((i == 0 && j > 0 && j < size - 1) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i > 0 && i < size -1 && j == 0) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j] && depthMap[i - 1][j] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i > 0 && i < size -1 && j == size - 1) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i - 1][j] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == size - 1 && j > 0 && j < size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+
+            else if (i > 0 && j < size - 1 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
                 directionMap[i][j] = NIW;
             else if (i < size - 1 && j < size - 1 &&
                      (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
@@ -83,9 +110,6 @@ void BattlefieldMap::initDirectionMap()
             // and keep focus on movement and shooting. 
 
             // Change the maximum maximumMapHeight (10) to a global constatnt so it's availbale everywhere. 
-
-            else if (i == -1 and j == 10)
-                directionMap[i][j] = P;
 
             else
                 directionMap[i][j] = F;

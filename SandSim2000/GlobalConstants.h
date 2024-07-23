@@ -7,5 +7,5 @@ public:
     static const int terrainSpiteHeight = 100;
     static const int quadTreeDepth = 5;
     static const int mapSize = 64;
-    
+    static const int maxMapHeight = 10;
 };
