@@ -52,6 +52,9 @@ void BattlefieldMap::initDirectionMap()
         directionMap[i] = new Direction[size];
         for (int j = 0; j < size; j++)
         {
+            /////////////////////////////
+            // Peak Mountain Checks
+            /////////////////////////////
             if ((i > 0 && i < size - 1 && j > 0 && j < size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
                 directionMap[i][j] = P;
             else if ((i == 0 && j == 0) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
@@ -71,7 +74,9 @@ void BattlefieldMap::initDirectionMap()
                 directionMap[i][j] = P;
             else if ((i == size - 1 && j > 0 && j < size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
                 directionMap[i][j] = P;
-
+            /////////////////////////////
+            // Inward angle checks
+            /////////////////////////////
             else if (i > 0 && j < size - 1 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
                 directionMap[i][j] = NIW;
             else if (i < size - 1 && j < size - 1 &&
@@ -82,7 +87,9 @@ void BattlefieldMap::initDirectionMap()
                 directionMap[i][j] = SIE;
             else if (i > 0 && j > 0 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
                 directionMap[i][j] = SIW;
-
+            /////////////////////////////
+            // Direction checks
+            /////////////////////////////
             else if (j < size - 1 && depthMap[i][j + 1] > depthMap[i][j])
                 directionMap[i][j] = N;
             else if (j > 0 && depthMap[i][j - 1] > depthMap[i][j])
@@ -91,7 +98,9 @@ void BattlefieldMap::initDirectionMap()
                 directionMap[i][j] = E;
             else if (i > 0 && depthMap[i - 1][j] > depthMap[i][j])
                 directionMap[i][j] = W;
-
+            /////////////////////////////
+            // Regular angle checks
+            /////////////////////////////
             else if (i < size - 1 && j < size - 1 && depthMap[i + 1][j + 1] > depthMap[i][j])
                 directionMap[i][j] = NE;
             else if (i < size - 1 && j > 0 && depthMap[i + 1][j - 1] > depthMap[i][j])
@@ -100,7 +109,8 @@ void BattlefieldMap::initDirectionMap()
                 directionMap[i][j] = SW;
             else if (i > 0 && j < size - 1 && depthMap[i - 1][j + 1] > depthMap[i][j])
                 directionMap[i][j] = NW;
-
+            /////////////////////////////
+            // 
             // Liam, I've attempted to put in a new terrain type which is "Peak", it's in the terrain sprite sheets 
             // already. But not sure even how it's currently selecting the right sprite based on heights. 
             // I think it might be easist to always make the very highest depth a Peak tile no matter what the
