@@ -73,6 +73,7 @@ void BattlefieldMap::initDirectionMap()
                 directionMap[i][j] = SW;
             else if (i > 0 && j < size - 1 && depthMap[i - 1][j + 1] > depthMap[i][j])
                 directionMap[i][j] = NW;
+
             // Liam, I've attempted to put in a new terrain type which is "Peak", it's in the terrain sprite sheets 
             // already. But not sure even how it's currently selecting the right sprite based on heights. 
             // I think it might be easist to always make the very highest depth a Peak tile no matter what the
@@ -80,6 +81,9 @@ void BattlefieldMap::initDirectionMap()
             // 
             // Would be really nice to have cliffs to so not all hills are slopes, but that's a nice-to-have, we'll skip it
             // and keep focus on movement and shooting. 
+
+            // Change the maximum maximumMapHeight (10) to a global constatnt so it's availbale everywhere. 
+
             else if (i == -1 and j == 10)
                 directionMap[i][j] = P;
 
