@@ -16,6 +16,7 @@ class Formation
     int id;
     bool isSelected;
     sf::Vector2f position;
+    int direction;
     BehaviorState behaviorState;
     float radius;
     float speed;
@@ -28,6 +29,7 @@ class Formation
     void calculateRadius();
     void stepToNextWaypoint();
     void formVectorField();
+    // calculateDirection();
     void updateBehaviorState();
 
 

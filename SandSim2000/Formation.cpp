@@ -49,6 +49,10 @@ void Formation::formVectorField()
     // at the front of the formation, and some old ones will need deleted at the back while
     // all the vectors in the middle will need shifted backward. This will mean only a certain amout of 
     // new vectors need to be calculated at each new waypoint step.
+
+    // The VectorField is very similar to the GhostGrid except that it updates every waypoint step, 
+    // and not all cells are added only new ones. The int direction property will be used to calculate which 
+    // set of BattlefieldCells will be the next ones added to the VectorField.
 }
 
 void Formation::updateBehaviorState() 
