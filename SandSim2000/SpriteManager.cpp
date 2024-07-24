@@ -13,6 +13,7 @@ SpriteManager::SpriteManager()
 	spriteSheetList.push_back(std::make_pair("RedBaron", SpriteSheet("../resources/images/Flyers/The_Red_Baron/RedBaron.png", 3, 3)));
 	spriteSheetList.push_back(std::make_pair("Tree", SpriteSheet("../resources/images/Scenery/Tree.png", 1, 1)));
 	spriteSheetList.push_back(std::make_pair("PathfinderAgent", SpriteSheet("../resources/images/Flyers/The_Red_Baron/RedBaron.png", 3, 3)));
+	spriteSheetList.push_back(std::make_pair("Snow_Pine", SpriteSheet("../resources/images/Scenery/snow_pine.png", 1, 1)));
 }
 
 void SpriteManager::SetRequiredTerrainSpriteSheetList(TerrainInstance** terrainMap, int mapSize)
