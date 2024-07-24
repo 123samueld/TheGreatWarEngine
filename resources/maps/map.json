@@ -173,6 +173,8 @@
         {"AgentType":"Tree", "position":[4, 8]},
         {"AgentType":"Tree", "position":[4, 9]},
         {"AgentType":"Tree", "position":[3, 9]},
-	    {"AgentType":"Snow_Pine", "position":[16, 16]}
+	{"AgentType":"Snow_Pine", "position":[2, 2]},
+ 	{"AgentType":"Snow_Pine", "position":[1, 0]},
+ 	{"AgentType":"Snow_Pine", "position":[0, 1]}	
     ]
 }
