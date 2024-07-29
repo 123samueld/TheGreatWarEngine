@@ -1,18 +1,19 @@
 #include "Scene.h"
 #define MAX_TILE_DEPTH 5
 #define TILE_SIZE 100
+const size_t SPRITE_POOL_SIZE = 1300;
 
-Scene::Scene() {}
 
-void Scene::UpdateGameScene(Camera& cam, GameState& gameState, InputState& inputState) {
-	GridGenerator gridGenerator;
-	sf::IntRect viewbounds(0, 0, cam.window.getSize().x, cam.window.getSize().y);
+void Scene::UpdateGameScene(Camera& cam, GameState& gameState, InputState& inputState)
+{
+    sf::IntRect viewbounds(-GlobalConstants::cellSize, 0, cam.window.getSize().x + GlobalConstants::cellSize,
+                           cam.window.getSize().y + GlobalConstants::cellSize);
 
-	gameScene.clear();
-	findViewportIterators(gameState.quadTree, cam, gridGenerator, viewbounds);
-	getBattlefieldCellFromMouseClick(cam, gridGenerator, inputState);
-
+    gameScene.clear();                                                          
+    findViewportIterators(gameState.quadTree, cam, gridGenerator, viewbounds);  
+    getBattlefieldCellFromMouseClick(cam, gridGenerator, inputState);           
 }
+
 
 GhostGrid* Scene::generateGhostGridFromScene(QuadTree* root, Camera& cam, GridGenerator& gridGenerator, sf::IntRect& viewbounds)
 {
@@ -76,46 +77,81 @@ void Scene::findViewportIterators(QuadTree* root, Camera& cam, GridGenerator& gr
 	}
 }
 
+sf::Sprite& Scene::getOrCreateSprite()
+{
+    // If the pool index exceeds the pool size, reset it.
+    if (spritePoolIndex >= spritePool.size())
+    {
+        spritePoolIndex = 0;
+    }
+    return spritePool[spritePoolIndex++];
+}
+
 std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager)
 {
-	std::vector<sf::Sprite> sprites = std::vector<sf::Sprite>();
-	GridGenerator gridGenerator;
+    std::vector<sf::Sprite> sprites;
+    std::unordered_map<std::string, SpriteSheet*> spriteSheetsCache;
 
-	for (auto iter = gameScene.begin(); iter != gameScene.end(); iter++)
-	{
-		BattlefieldCell currentCell = **iter;
-		sf::Sprite terrainSprite = *currentCell.terrainSprite;
+    // Initialize sprite pool if empty
+    if (spritePool.empty())
+    {
+        spritePool.resize(SPRITE_POOL_SIZE);
+    }
 
-		sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
+    for (auto iter = gameScene.begin(); iter != gameScene.end(); iter++)
+    {
+        BattlefieldCell currentCell = **iter;
+        const auto& terrainTypes = currentCell.terrain.terrainTypes;
 
-		terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
-		sprites.push_back(terrainSprite);
+        for (size_t i = 0; i < terrainTypes.size(); ++i)
+        {
+            const auto& terrainTypeName = terrainTypes[i].name;
 
-		if (currentCell.Objects.size() != 0)
-		{
-			for (int i = 0; i < currentCell.Objects.size(); i++)
-			{
-				Agent* currentAgent = currentCell.Objects[i];
+            auto spriteSheetIter = spriteSheetsCache.find(terrainTypeName);
+            if (spriteSheetIter == spriteSheetsCache.end())
+            {
+                spriteSheetIter =
+                    spriteSheetsCache
+                        .emplace(terrainTypeName, &SpriteManager::GetInstance()->GetSpriteSheet(terrainTypeName))
+                        .first;
+            }
+            SpriteSheet* spriteSheet = spriteSheetIter->second;
 
-				std::string spriteString = currentAgent->getSpriteString();
-				int spriteIndex = currentAgent->getSpriteIndex();
+            sf::Sprite& terrainSprite = getOrCreateSprite();
+            terrainSprite = *spriteSheet->getSprite(currentCell.terrain.spriteIndex);
+            terrainSprite.setTexture(spriteSheet->texture);
+            terrainSprite.setScale(scaleX, scaleY);
 
-				// interpolate the agents height towards the cells terrain height;
-				currentAgent->agentHeightAxis += (currentCell.YOffset - currentAgent->agentHeightAxis) * 0.1f;
+            sf::Vector2f isometricPosition =
+                gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
+            terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
+            terrainSprite.setColor(sf::Color(255, 255, 255, 255 / static_cast<int>(terrainTypes.size())));
 
-				//sf::Sprite objectSprite = *SpriteManager::GetInstance()->GetSprite(spriteString, spriteIndex);
-				sf::Sprite objectSprite = animationManager->getAgentSpriteFromDirection(currentAgent);
-				objectSprite.setTexture(SpriteManager::GetInstance()->GetSpriteSheet(spriteString).texture);
+            sprites.push_back(terrainSprite);
+        }
 
-				sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentAgent->getPosX(), currentAgent->getPosY()));
+        if (!currentCell.Objects.empty())
+        {
+            for (Agent* currentAgent : currentCell.Objects)
+            {
+                currentAgent->agentHeightAxis += (currentCell.YOffset - currentAgent->agentHeightAxis) * 0.1f;
 
-				objectSprite.setPosition(isometricPosition.x, isometricPosition.y - currentAgent->agentHeightAxis);
+                sf::Sprite& objectSprite = getOrCreateSprite();
+                objectSprite = animationManager->getAgentSpriteFromDirection(currentAgent);
+                objectSprite.setTexture(
+                    SpriteManager::GetInstance()->GetSpriteSheet(currentAgent->getSpriteString()).texture);
+                objectSprite.setScale(scaleX, scaleY);
 
-				sprites.push_back(objectSprite);
-			}
-		}
-	}
-	return sprites;
+                sf::Vector2f isometricPosition = gridGenerator.cartesianToIsometricTransform(
+                    sf::Vector2f(currentAgent->getPosX(), currentAgent->getPosY()));
+                objectSprite.setPosition(isometricPosition.x, isometricPosition.y - currentAgent->agentHeightAxis);
+
+                sprites.push_back(objectSprite);
+            }
+        }
+    }
+
+    return sprites;
 }
 
 sf::Vector2i Scene::getScreenPositionOfCell(const BattlefieldCell& cell, Camera& cam, GridGenerator& gridGenerator) {

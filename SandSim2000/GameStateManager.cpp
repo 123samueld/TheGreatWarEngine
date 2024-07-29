@@ -1,21 +1,19 @@
 #include "GameStateManager.h"
 
-#define CELLSIZE 100
-
-GameStateManager::GameStateManager(unsigned int numCells) {
-    initializeBattlefieldVector(numCells);
+GameStateManager::GameStateManager(const char* mapFilepath) {
+    initializeBattlefieldVector(mapFilepath);
 }
 
-void GameStateManager::initialiseQuadTree(unsigned int battlefieldSize, unsigned int& index) {
-    battlefieldMap.initMap(static_cast<unsigned int>(battlefieldSize / 100));
-    state.quadTree = new QuadTree(sf::IntRect(0, 0, battlefieldSize, battlefieldSize), 0);
-    generateQuadTree((QuadTree*)state.quadTree, index);
+void GameStateManager::initialiseQuadTree(const char* mapFilepath, unsigned int& index) {
+    unsigned int mapSize = battlefieldMap.initMap(mapFilepath);
+    state.quadTree = new QuadTree(sf::IntRect(0, 0, mapSize * GlobalConstants::cellSize, mapSize * GlobalConstants::cellSize), 0);
+    generateQuadTree(state.quadTree, index);
 
 }
 
 void GameStateManager::generateQuadTree(QuadTree* root, unsigned int& index) {
     float size = root->quadRect.getSize().x / 2;
-    if (size > CELLSIZE) {
+    if (size > GlobalConstants::cellSize) {
 
         std::array<QuadTree*, 4> children;
 
@@ -41,7 +39,7 @@ void GameStateManager::generateQuadTree(QuadTree* root, unsigned int& index) {
             int x = root->quadRect.getPosition().x + size * (i % 2);
             int y = root->quadRect.getPosition().y + size * ((int)(i > 1)); 
 
-            state.BattlefieldVector[index] = generateCell(x / CELLSIZE, y/CELLSIZE);
+            state.BattlefieldVector[index] = generateCell(x / GlobalConstants::cellSize, y/ GlobalConstants::cellSize);
 
             std::vector<BattlefieldCell>::iterator iter = state.BattlefieldVector.begin() + (index++);
 
@@ -61,8 +59,8 @@ BattlefieldCell GameStateManager::generateCell(int x, int y)
     newCell.x = x;
     newCell.y = y;
     newCell.vertices = battlefieldMap.getVertices(x, y);
-    newCell.terrainSprite = battlefieldMap.getSpriteAtPosition({ x, y });
-    newCell.YOffset = battlefieldMap.getHeightAtPosition({ x, y }) * CELLSIZE / 4;
+    newCell.terrain = battlefieldMap.getTerrainInstanceAtPosition({ x, y });
+    newCell.YOffset = battlefieldMap.getHeightAtPosition({ x, y }) * GlobalConstants::cellSize / 4;
 
     return newCell;
 }
@@ -76,10 +74,10 @@ BattlefieldCell* GameStateManager::getCell(int x, int y) {
     return nullptr;
 }
 
-void GameStateManager::initializeBattlefieldVector(unsigned int numCells) 
+void GameStateManager::initializeBattlefieldVector(const char* mapFilepath) 
 {
     state.BattlefieldVector.clear();
-    state.BattlefieldVector.resize(numCells); 
+    state.BattlefieldVector.resize(GlobalConstants::mapSize * GlobalConstants::mapSize); 
     unsigned int index = 0;
-    initialiseQuadTree(static_cast<int>(std::floor(std::sqrt(numCells))) * 100, index);
+    initialiseQuadTree(mapFilepath, index);
 }

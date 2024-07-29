@@ -6,11 +6,14 @@
 #include <list>
 
 #include "SpriteSheet.h"
+#include "TerrainInstance.h"
 
 class SpriteManager
 {
 public:
     SpriteManager();
+
+    void SetRequiredTerrainSpriteSheetList(TerrainInstance** terrainMap, int mapSize);
 
     sf::Sprite* GetSprite(std::string spriteSheetID, int spriteIndex);
     SpriteSheet& GetSpriteSheet(std::string spriteSheetID);

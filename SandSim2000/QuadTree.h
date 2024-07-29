@@ -12,7 +12,6 @@ struct QuadTree {
     virtual void f() {};
 
     unsigned int depth;
-    GlobalConstants constants;
 
     sf::IntRect quadRect;
     std::array<QuadTree*, 4> children;
@@ -115,7 +114,7 @@ struct QuadTreeLeaf : public QuadTree {
 
     BattlefieldCell* getCell(QuadTree* node, int targetX, int targetY, int targetLevel) override
     {
-        if (node->quadRect.getPosition().x == targetX && node->quadRect.getPosition().y == targetY && node->depth == targetLevel) return iter._Unwrapped();
+        if (node->quadRect.getPosition().x == targetX && node->quadRect.getPosition().y == targetY && node->depth == targetLevel + 1) return iter._Unwrapped();
 
         return nullptr;
     }
@@ -126,8 +125,8 @@ struct QuadTreeLeaf : public QuadTree {
 
         for (int i = 0; i < iter->Objects.size(); i++)
         {
-            float differenceX = abs(targetX - iter->Objects[i]->getPosX() * constants.cellSize);
-            float differenceY = abs(targetY - iter->Objects[i]->getPosY() * constants.cellSize);
+            float differenceX = abs(targetX - iter->Objects[i]->getPosX() * GlobalConstants::cellSize);
+            float differenceY = abs(targetY - iter->Objects[i]->getPosY() * GlobalConstants::cellSize);
             float distance = std::sqrt((differenceX * differenceX) + (differenceY * differenceY));
 
             if(distance <= radius)

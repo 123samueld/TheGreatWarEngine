@@ -8,41 +8,46 @@ int main()
     else if (selectedOption == MenuOption::MapEditor)
         std::cout << "Map Editor selected\n";
 
+    const char* currentMap = "../resources/maps/map.json";
+
     SpriteManager sprites = SpriteManager();
     AnimationManager animationManager;
-    unsigned int mapSize = 16;
-    GameStateManager gameStateManager = GameStateManager(mapSize * mapSize);
+    GameStateManager gameStateManager = GameStateManager(currentMap);
     AgentManager agentManager;
     InputState inputState;
     Camera camera;
-    Scene scene;
+    GridGenerator gridGenerator;
+    Scene scene(gridGenerator); 
+
+    agentManager.loadAgentsFromMap(currentMap, &scene.gameScene, gameStateManager);
 
     // agentManager.initialiseFormations(args);
+    agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
 
-    agentManager.placeScenery(sf::Vector2i(7, 8), &scene.gameScene, Tree(7, 8), gameStateManager);
-    agentManager.placeScenery(sf::Vector2i(9, 8), &scene.gameScene, Tree(9, 8), gameStateManager);
-    agentManager.placeScenery(sf::Vector2i(8, 7), &scene.gameScene, Tree(8, 7), gameStateManager);    
-    agentManager.placeScenery(sf::Vector2i(8, 9), &scene.gameScene, Tree(8, 9), gameStateManager);    
+
+    int numberOfAgents = 400;
+    for(int i = 0; i < numberOfAgents; i++)
+        agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
 
     while (camera.window.isOpen())
     {
         inputState = InputStateManager::getInstance().updateInputState(camera.window, inputState);
 
         sf::Event event;
-        while (camera.window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+        while (camera.window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
                 camera.window.close();
             }
         }
-        if(inputState.isTPressed)
-            agentManager.placeScenery(inputState.selectedCell, &scene.gameScene, Tree(inputState.selectedCell.x, inputState.selectedCell.y), gameStateManager);
 
         agentManager.onUpdate(inputState, &scene.gameScene, gameStateManager, camera, scene);
-
         if (!camera.Update(inputState))
             break;
         scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
-        camera.Draw(scene.buildGameScene(&animationManager), inputState);
+        std::vector<sf::Sprite> spriteMap = scene.buildGameScene(&animationManager);
+        camera.Draw(spriteMap, inputState);
     }
     return 0;
 }

@@ -5,6 +5,9 @@
 #include <unordered_set>
 #include <queue>
 #include <functional>
+#include <json.hpp>
+#include <fstream>
+#include <vector>
 
 #include "GlobalConstants.h"
 #include "GameStateManager.h"
@@ -34,9 +37,10 @@ public:
 	//void placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, PathfinderAgent agent, GameStateManager& gameStateManager);
     void initialiseFormations(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, GameStateManager& gameStateManager, Formation formation);
 
+	void loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager);
 
 	PathfinderAgent* pathfinderAgent = nullptr;
-	MobileAgent* mobileAgent = nullptr;
+	std::vector<MobileAgent*> mobileAgent = std::vector<MobileAgent*>();
 private:
 	bool leftClick = false;
 	bool rightClick = false;

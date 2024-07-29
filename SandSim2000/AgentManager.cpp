@@ -24,21 +24,20 @@ void AgentManager::onUpdate(
 
 
         std::vector<Agent*> agents = std::vector<Agent*>();
-        gameStateManager.getState().quadTree->getAgentsInRadius(gameStateManager.getState().quadTree, pathfinderAgent->getPosXIndex() * 100, pathfinderAgent->getPosYIndex() * 100, 200, 4, &agents);
+        gameStateManager.getState().quadTree->getAgentsInRadius(gameStateManager.getState().quadTree, pathfinderAgent->getPosXIndex() * GlobalConstants::cellSize, pathfinderAgent->getPosYIndex() * GlobalConstants::cellSize, GlobalConstants::cellSize * 2, GlobalConstants::quadTreeDepth, &agents);
     }
-    if (mobileAgent != nullptr)
+    if (mobileAgent.size() != 0)
     {
-        mobileAgent->update(&gameStateManager);
+        for(int i = 0; i < mobileAgent.size(); i++)
+            mobileAgent[i]->update(&gameStateManager);
     }
 
-    if (state.isLeftMouseButtonPressed && leftClick == false)
+    if (state.isLeftMouseButtonPressed && leftClick == false && pathfinderAgent != nullptr)
     {
-        
-        BattlefieldCell* targetCell = gameStateManager.getState().quadTree->getCell(gameStateManager.state.quadTree, state.selectedCell.x * 100, state.selectedCell.y * 100, 4);
+        GameState& gamestate = gameStateManager.getState();
+        BattlefieldCell* targetCell = gameStateManager.getCell(state.selectedCell.x, state.selectedCell.y);
         
         movementManager.SetUnitPath(pathfinderAgent, targetCell, &gameStateManager, state, scene, &camera);
-
-
 
         leftClick = true;
     }
@@ -56,23 +55,18 @@ void AgentManager::onUpdate(
     }
 }
 
-
 void AgentManager::placeScenery(sf::Vector2i isometricCell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, Scenery sceneObject, GameStateManager& gameStateManager)
 {
-    if (sceneObject.getUnitType() == "Tree")
-    {
-        Tree* tree = new Tree(isometricCell.x, isometricCell.y);
+    Scenery* tree = new Scenery(isometricCell.x, isometricCell.y, sceneObject.getSpriteString());
 
-        gameStateManager.getState().Units.push_back(tree);
+    gameStateManager.getState().Units.push_back(tree);
 
-        gameStateManager.getState().quadTree->insert(tree, 100);
-        gameStateManager.getState().quadTree->insert(tree, constants.cellSize);
+    gameStateManager.getState().quadTree->insert(tree, constants.cellSize);
 
-        BattlefieldCell* cell = gameStateManager.getCell(isometricCell.x, isometricCell.y);
+    BattlefieldCell* cell = gameStateManager.getCell(isometricCell.x, isometricCell.y);
 
-        if (cell != nullptr)
-            cell->impassableTerrain = true;
-    }
+    if (cell != nullptr)
+        cell->impassableTerrain = true;
 }
 
 void AgentManager::placeAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, Agent agent, GameStateManager& gameStateManager)
@@ -90,7 +84,7 @@ void AgentManager::placeMobileAgent(sf::Vector2i cell, std::set<std::vector<Batt
     gameStateManager.getState().Units.push_back(newAgent);
     gameStateManager.getState().quadTree->insert(newAgent, constants.cellSize);
 
-    mobileAgent = newAgent;
+    mobileAgent.push_back(newAgent);
 }
 
 void AgentManager::placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, PathfinderAgent agent, GameStateManager& gameStateManager)
@@ -106,4 +100,24 @@ void AgentManager::placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<
 
     pathfinderAgent = newAgent;
     pathfinderAgent->current = currentCell;
+}
+
+void AgentManager::loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager)
+{
+    std::ifstream mapDataFile(filepath);
+
+    if (!mapDataFile.is_open())
+    {
+        std::cerr << "missing filepath: " << filepath << std::endl;
+        return;
+    }
+    nlohmann::json mapData;
+    mapDataFile >> mapData;
+    mapDataFile.close();
+
+    for (int i = 0; i < mapData["SceneryData"].size(); i++)
+    {
+        sf::Vector2i position = sf::Vector2i(mapData["SceneryData"][i]["position"][0], mapData["SceneryData"][i]["position"][1]);
+        placeScenery(position, gameScene, Scenery(position.x, position.y, mapData["SceneryData"][i]["AgentType"]), gameStateManager);
+    }
 }
