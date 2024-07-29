@@ -21,7 +21,9 @@ int main()
 
     agentManager.loadAgentsFromMap(currentMap, &scene.gameScene, gameStateManager);
 
+    // agentManager.initialiseFormations(args);
     agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
+
 
     int numberOfAgents = 400;
     for(int i = 0; i < numberOfAgents; i++)
