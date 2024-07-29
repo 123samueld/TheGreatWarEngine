@@ -148,6 +148,7 @@
     },
     "SceneryData": [
         {"AgentType":"Tree", "position":[ 1 ,  58 ]},
+        {"AgentType":"Snow_Pine", "position":[ 3 ,  2 ]},
 {"AgentType":"Tree", "position":[ 1 ,  59 ]},
 {"AgentType":"Tree", "position":[ 2 ,  27 ]},
 {"AgentType":"Tree", "position":[ 2 ,  58 ]},
