@@ -253,6 +253,22 @@
 {"AgentType":"Tree", "position":[ 3 ,  7 ]},
 {"AgentType":"Tree", "position":[ 4 ,  7 ]},
 {"AgentType":"Tree", "position":[ 5 ,  8 ]},
-{"AgentType":"Tree", "position":[ 63 ,  37 ]}
+{"AgentType":"Tree", "position":[ 63 ,  37 ]},
+{"AgentType":"Snow_Pine", "position":[ 2 ,  1 ]},
+{"AgentType":"Snow_Pine", "position":[ 3,  1 ]},
+{"AgentType":"Snow_Pine", "position":[ 3 ,  2 ]},
+{"AgentType":"Snow_Pine", "position":[ 1 ,  3 ]},
+{"AgentType":"Snow_Pine", "position":[ 2 ,  2 ]},
+{"AgentType":"Snow_Pine", "position":[ 3 ,  3 ]},
+{"AgentType":"Snow_Pine", "position":[ 1 ,  4 ]},
+{"AgentType":"Snow_Pine", "position":[ 0,  4 ]},
+{"AgentType":"Snow_Pine", "position":[ 1 ,  5 ]},
+{"AgentType":"Snow_Pine", "position":[ 0 ,  7 ]},
+{"AgentType":"Snow_Pine", "position":[ 0,  6 ]},
+{"AgentType":"Snow_Pine", "position":[ 1 ,  7 ]},
+{"AgentType":"Snow_Pine", "position":[ 5 ,  1 ]},
+{"AgentType":"Snow_Pine", "position":[ 7 ,  0 ]},
+{"AgentType":"Snow_Pine", "position":[ 6,  0 ]},
+{"AgentType":"Snow_Pine", "position":[ 7 ,  1 ]}
     ]
 }
