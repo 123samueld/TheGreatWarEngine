@@ -129,6 +129,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -187,6 +188,7 @@
     <ClInclude Include="AgentManager.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="SpriteSheet.h" />
+    <ClInclude Include="TerrainInstance.h" />
     <ClInclude Include="TheGreatWar.h" />
     <ClInclude Include="Tree.h" />
   </ItemGroup>

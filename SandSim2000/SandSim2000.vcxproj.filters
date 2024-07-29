@@ -75,6 +75,9 @@
     <ClCompile Include="MobileAgent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GridGenerator.h">
@@ -153,6 +156,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GhostGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheGreatWar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

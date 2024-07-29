@@ -6,7 +6,8 @@ void MovementManager::SetUnitPath(PathfinderAgent* agent, BattlefieldCell* goal,
     {
         targetCell = goal;
 
-        BattlefieldCell* startCell = gameStateManager->getState().quadTree->getCell(gameStateManager->state.quadTree, agent->getPosXIndex() * 100, agent->getPosYIndex() * 100, 4);
+        //BattlefieldCell* startCell = gameStateManager->getState().quadTree->getCell(gameStateManager->state.quadTree, agent->getPosXIndex() * 100, agent->getPosYIndex() * 100, 4);
+        BattlefieldCell* startCell = gameStateManager->getCell(agent->getPosXIndex(), agent->getPosYIndex());
 
         GridGenerator generator;
         sf::IntRect viewbounds(0, 0, camera->window.getSize().x, camera->window.getSize().y);
@@ -37,10 +38,6 @@ void MovementManager::propagateWaveFrontHeuristics(BattlefieldCell* goal, GameSt
         for (BattlefieldCell* node : waveFrontNodes)
         {
             int x = node->x; int y = node->y;
-            // Z is the depth of the node in the quadtree, 
-            // however we only have the one layer and dont store its depth
-            int z = GlobalConstants::quadTreeDepth;
-
 
             BattlefieldCell* northNeighbour = ghostGrid->getCell(x, y - 1);
             BattlefieldCell* eastNeighbour = ghostGrid->getCell(x + 1, y);
@@ -81,9 +78,14 @@ void MovementManager::propagateWaveFrontHeuristics(BattlefieldCell* goal, GameSt
 
 int MovementManager::AStar(BattlefieldCell* start, BattlefieldCell* goal)
 {
-    if (start == nullptr || goal == nullptr)
+    if (start == nullptr)
     {
-        std::cerr << "[ERROR][PATHFINDING]--> Start or goal is nullptr" << std::endl;
+        std::cerr << "[ERROR][PATHFINDING]--> Start is nullptr" << std::endl;
+        return 0;
+    }
+    if (goal == nullptr)
+    {
+        std::cerr << "[ERROR][PATHFINDING]--> Goal is nullptr" << std::endl;
         return 0;
     }
 

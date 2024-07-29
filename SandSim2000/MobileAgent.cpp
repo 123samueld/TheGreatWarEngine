@@ -5,7 +5,7 @@ void MobileAgent::update(GameStateManager* gameStateManager)
 
 	nearbyAgents = std::vector<Agent*>();
 
-	gameStateManager->state.quadTree->getAgentsInRadius(gameStateManager->state.quadTree, getPosX() * constants.cellSize, getPosY() * constants.cellSize, constants.cellSize * 2, constants.quadTreeDepth, &nearbyAgents);
+	gameStateManager->state.quadTree->getAgentsInRadius(gameStateManager->state.quadTree, getPosX() * GlobalConstants::cellSize, getPosY() * GlobalConstants::cellSize, GlobalConstants::cellSize * 2, GlobalConstants::quadTreeDepth, &nearbyAgents);
 	
 	if(pathfinderAgent == nullptr)
 		pathfinderAgent = getPathfinderFromList();
@@ -15,6 +15,8 @@ void MobileAgent::update(GameStateManager* gameStateManager)
 	if (abs(length) > 0.1f)
 	{
 		Coherence();
+		seperation();
+		Alignment();
 
 		ClampVelocity();
 
@@ -37,8 +39,59 @@ PathfinderAgent* MobileAgent::getPathfinderFromList()
 
 void MobileAgent::Coherence()
 {
-	velocity.x = (pathfinderAgent->getPosX() - getPosX()) * 0.1f;
-	velocity.y = (pathfinderAgent->getPosY() - getPosY()) * 0.1f;
+	velocity.x = (pathfinderAgent->getPosX() - getPosX()) * coherenceFactor;
+	velocity.y = (pathfinderAgent->getPosY() - getPosY()) * coherenceFactor;
+}
+
+void MobileAgent::seperation()
+{
+	float close_dx = 0; float close_dy = 0;
+
+	for (int i = 0; i < nearbyAgents.size(); i++)
+	{
+		float dX = nearbyAgents[i]->getPosX() - getPosX();
+		float dY = nearbyAgents[i]->getPosY() - getPosY();
+		float length = sqrt((dX * dX) + (dY * dY));
+
+		if (nearbyAgents[i]->isMobileAgent && length <= tooCloseToAgent && nearbyAgents[i]->isPathfinderAgent == false)
+		{
+			close_dx += getPosX() - nearbyAgents[i]->getPosX();
+			close_dy += getPosY() - nearbyAgents[i]->getPosY();
+		}
+		else if (nearbyAgents[i]->isMobileAgent == false && length <= tooCloseToScenery && nearbyAgents[i]->isPathfinderAgent == false)
+		{
+			close_dx += getPosX() - nearbyAgents[i]->getPosX();
+			close_dy += getPosY() - nearbyAgents[i]->getPosY();
+		}
+	}
+
+	velocity.x += close_dx * avoidFactor;
+	velocity.y += close_dy * avoidFactor;
+}
+
+void MobileAgent::Alignment()
+{
+	float xvel_avg = 0; float yvel_avg = 0;
+	int boidCount = 0;
+	for (Agent* agent : nearbyAgents)
+	{
+		if (agent->isMobileAgent)
+		{
+			boidCount += 1;
+			MobileAgent* otherAgent = dynamic_cast<MobileAgent*>(agent);
+
+			xvel_avg += otherAgent->velocity.x;
+			yvel_avg += otherAgent->velocity.y;
+		}
+	}
+	if (boidCount > 0)
+	{
+		xvel_avg = xvel_avg / boidCount;
+		yvel_avg = yvel_avg / boidCount;
+
+		velocity.x += (xvel_avg - velocity.x) * alighnmentFactor;
+		velocity.y += (yvel_avg - velocity.y) * alighnmentFactor;
+	}
 }
 
 void MobileAgent::ClampVelocity()
@@ -49,7 +102,7 @@ void MobileAgent::ClampVelocity()
 
 void MobileAgent::updateCurrentSpriteDirection()
 {
-	float spriteBarrier = speed * 0.5f;
+	float spriteBarrier = speed * 0.3f;
 
 	if (velocity.x > spriteBarrier) currentDirection.x = 1;
 	if (velocity.x < -spriteBarrier) currentDirection.x = -1;

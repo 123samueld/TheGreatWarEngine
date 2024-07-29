@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Agent.h"
+#include "TerrainInstance.h"
 
 
 class BattlefieldCell {
@@ -27,7 +28,7 @@ public:
     std::vector<sf::Vector2i> vertices;
 
     std::vector<Agent*> Objects = std::vector<Agent*>();
-    sf::Sprite* terrainSprite;
+    TerrainInstance terrain;
     int YOffset;
 
     bool impassableTerrain = false;

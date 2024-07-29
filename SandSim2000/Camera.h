@@ -15,7 +15,7 @@ public:
     Camera();
 
     bool Update(InputState& state);
-    void Draw(std::vector<sf::Sprite> sprites, const InputState& state);
+    void Draw(std::vector<sf::Sprite>& sprites, const InputState& state);
 
     void WorldToScreen(float worldX, float worldY, int& outScreenX, int& outScreenY);
     void ScreenToWorld(int screenX, int screenY, float& outWorldX, float& outWorldY);
@@ -50,4 +50,19 @@ private:
     void clickPan(const InputState& inputState);
     void scrollPan(const InputState& inputState);
     void snapPan(const InputState& inputState);
+
+    sf::Font font;
+    sf::Text text1;
+
+    void Initialize()
+    {
+        if (!font.loadFromFile("../resources/fonts/Diamond Gothic.ttf"))
+        {
+            std::cerr << "Failed to load font!" << std::endl;
+        }
+        text1.setFont(font);
+        text1.setCharacterSize(24);
+        text1.setFillColor(sf::Color::White);
+        text1.setPosition(10, 10);
+    }
 };

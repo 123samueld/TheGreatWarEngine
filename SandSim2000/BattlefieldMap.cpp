@@ -1,98 +1,159 @@
 #include "BattlefieldMap.h"
-#include <cmath>
-#include <iostream>
 
-void BattlefieldMap::initMap(unsigned int mapSize)
+int BattlefieldMap::initMap(const char* filepath)
 {
-    size = static_cast<int>(mapSize);
-    grass_spritesheet = SpriteManager::GetInstance()->GetSpriteSheet("GrassTerrain");
-        
+    std::ifstream mapDataFile(filepath);
+
+    if (!mapDataFile.is_open())
+    {
+        std::cerr << "Unable to open the map file" << std::endl;
+        return 1;
+    }
+    mapDataFile >> mapData;
+    mapDataFile.close();
+
+    size = mapData["MapData"]["MapSize"][0];
+
     initDepthMap();
     initDirectionMap();
-    initSpriteMap();
+    initTerrainMap();
+
+    return size;
+}
+
+int imin(int val1, int val2)
+{
+    if(val1 < val2)
+        return val1;
+    return val2;
 }
 
 void BattlefieldMap::initDepthMap()
 {
     depthMap = new int* [size];
     
-    depthMap[0] = new int[size]     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[1] = new int[size]     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[2] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[3] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[4] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[5] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[6] = new int[size]     {0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[7] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[8] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0};
-    depthMap[9] = new int[size]     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0};
-    depthMap[10] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[11] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[12] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[13] = new int[size]    {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-    depthMap[14] = new int[size]    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[15] = new int[size]    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    
-    /*
-    depthMap[0] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[1] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[2] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[3] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[4] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[5] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[6] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[7] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[8] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[9] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[10] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[11] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[12] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[13] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[14] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    depthMap[15] = new int[size] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    */
+    for (int i = 0; i < size; i++)
+    {
+        depthMap[i] = new int[size];
+        for (int j = 0; j < size; j++)
+        {
+            depthMap[i][j] = imin(mapData["MapData"]["HeightMap"][i][j], GlobalConstants::maxMapHeight);
+        }
+    }
 }
 
 
 void BattlefieldMap::initDirectionMap()
 {
-    directionMap = new Direction * [size];
-    
-    directionMap[0] = new Direction[size]   { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[1] = new Direction[size]   { F, NE, E, E, E, E, E, E, E, E, E, E, E, E, SE, F };
-    directionMap[2] = new Direction[size]   { F, N, NE, E, E, SE, F, F, F, F, F, F, F, F, S, F };
-    directionMap[3] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[4] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[5] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[6] = new Direction[size]   { F, N, N, F, F, S, F, F, F, F, F, F, F, F, S, F };
-    directionMap[7] = new Direction[size]   { F, N, NW, W, W, SW, F, F, F, NE, E, E, E, SE, S, F };
-    directionMap[8] = new Direction[size]   { F, N, F, F, F, F, F, F, F, N, F, F, F, S, S, F };
-    directionMap[9] = new Direction[size]   { F, N, F, F, F, F, F, F, F, N, F, F, F, S, S, F };
-    directionMap[10] = new Direction[size]  { F, N, F, F, F, F, F, F, F, NW, W, W, W, SW, S, F };
-    directionMap[11] = new Direction[size]  { F, N, F, F, F, F, F, F, F, F, F, F, F, F, S, F };
-    directionMap[12] = new Direction[size]  { F, N, F, F, F, F, F, F, F, F, F, F, F, F, S, F };
-    directionMap[13] = new Direction[size]  { F, N, F, F, F, F, F, F, F, F, F, F, F, F, S, F };
-    directionMap[14] = new Direction[size]  { F, NW, W, W, W, W, W, W, W, W, W, W, W, W, SW, F };
-    directionMap[15] = new Direction[size]  { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    
-    /*
-    directionMap[0] = new Direction[size] { F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[1] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[2] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[3] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[4] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[5] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[6] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[7] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[8] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[9] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[10] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[11] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[12] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[13] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[14] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    directionMap[15] = new Direction[size]{ F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F };
-    */
+    directionMap = new Direction*[size];
+
+    for (int i = 0; i < size; i++)
+    {
+        directionMap[i] = new Direction[size];
+        for (int j = 0; j < size; j++)
+        {
+            /////////////////////////////
+            // Peak Mountain Checks
+            /////////////////////////////
+            if ((i > 0 && i < size - 1 && j > 0 && j < size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == 0 && j == 0) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if((i == 0 && j == size - 1) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == size - 1 && j == 0) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == size - 1 && j == size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+
+            else if((i == 0 && j > 0 && j < size - 1) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i > 0 && i < size -1 && j == 0) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j] && depthMap[i - 1][j] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i > 0 && i < size -1 && j == size - 1) && (depthMap[i + 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i - 1][j] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            else if ((i == size - 1 && j > 0 && j < size - 1) && (depthMap[i - 1][j] < depthMap[i][j] && depthMap[i][j - 1] < depthMap[i][j] && depthMap[i][j + 1] < depthMap[i][j]))
+                directionMap[i][j] = P;
+            /////////////////////////////
+            // Inward angle checks
+            /////////////////////////////
+            else if (i > 0 && j < size - 1 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
+                directionMap[i][j] = NIW;
+            else if (i < size - 1 && j < size - 1 &&
+                     (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j + 1] > depthMap[i][j]))
+                directionMap[i][j] = NIE;
+            else if (i < size - 1 && j > 0 &&
+                     (depthMap[i + 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
+                directionMap[i][j] = SIE;
+            else if (i > 0 && j > 0 && (depthMap[i - 1][j] > depthMap[i][j] && depthMap[i][j - 1] > depthMap[i][j]))
+                directionMap[i][j] = SIW;
+            /////////////////////////////
+            // Direction checks
+            /////////////////////////////
+            else if (j < size - 1 && depthMap[i][j + 1] > depthMap[i][j])
+                directionMap[i][j] = N;
+            else if (j > 0 && depthMap[i][j - 1] > depthMap[i][j])
+                directionMap[i][j] = S;
+            else if (i < size - 1 && depthMap[i + 1][j] > depthMap[i][j])
+                directionMap[i][j] = E;
+            else if (i > 0 && depthMap[i - 1][j] > depthMap[i][j])
+                directionMap[i][j] = W;
+            /////////////////////////////
+            // Regular angle checks
+            /////////////////////////////
+            else if (i < size - 1 && j < size - 1 && depthMap[i + 1][j + 1] > depthMap[i][j])
+                directionMap[i][j] = NE;
+            else if (i < size - 1 && j > 0 && depthMap[i + 1][j - 1] > depthMap[i][j])
+                directionMap[i][j] = SE;
+            else if (i > 0 && j > 0 && depthMap[i - 1][j - 1] > depthMap[i][j])
+                directionMap[i][j] = SW;
+            else if (i > 0 && j < size - 1 && depthMap[i - 1][j + 1] > depthMap[i][j])
+                directionMap[i][j] = NW;
+            /////////////////////////////
+            else
+                directionMap[i][j] = F;
+        }
+    }
+}
+
+void BattlefieldMap::initTerrainMap() {
+    terrainMap = new TerrainInstance * [size];
+    for (int i = 0; i < size; ++i) {
+        terrainMap[i] = new TerrainInstance[size];
+        for (int j = 0; j < size; ++j) {
+            std::string terrainKey = mapData["MapData"]["TerrainMap"][i][j];
+            std::string thisTerrainTypeName;
+
+            if (mapData["MapData"]["RequiredTerrainTypes"].contains(terrainKey)) {
+                thisTerrainTypeName = mapData["MapData"]["RequiredTerrainTypes"][terrainKey];
+            }
+            else {
+                std::cerr << "Unknown terrain type key: " << terrainKey << std::endl;
+                continue;
+            }
+
+            bool found = false;
+            for (const auto& terrainType : terrainTypes) {
+                if (terrainType.name == thisTerrainTypeName) {
+                    terrainMap[i][j] = TerrainInstance(terrainType);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                std::cerr << "Unknown terrain type name: " << thisTerrainTypeName << std::endl;
+            }
+        }
+    }
+
+    for (int y = 0; y < size; ++y) {
+        for (int x = 0; x < size; ++x) {
+            terrainMap[y][x].setSpriteIndex(directionMap[y][x]);
+        }
+    }
+
+    SpriteManager::GetInstance()->SetRequiredTerrainSpriteSheetList(terrainMap, size);
 }
 
 int BattlefieldMap::testLocation(int x, int y, int height)
@@ -102,26 +163,12 @@ int BattlefieldMap::testLocation(int x, int y, int height)
     return 0;
 }
 
-void BattlefieldMap::initSpriteMap()
-{
-    spriteMap = new sf::Sprite ** [size];
-    for (int y = 0; y < size; y++)
-    {
-        spriteMap[y] = new sf::Sprite * [size];
-
-        for (int x = 0; x < size; x++)
-        {
-            spriteMap[y][x] = grass_spritesheet.getSprite(directionMap[y][x]);
-            spriteMap[y][x]->setTexture(grass_spritesheet.texture);
-        }
-    }
-}
-
 std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
 {
     std::vector<sf::Vector2i> vertices;
     int directionValue;
 
+    /*
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             if (i == y && j == x) {
@@ -130,7 +177,9 @@ std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
             }
         }
     }
-
+    */
+    
+    directionValue = directionMap[y][x];
     
     switch (directionValue)
     {
@@ -188,6 +237,30 @@ std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
             vertices.push_back(sf::Vector2i(0, 50));
             vertices.push_back(sf::Vector2i(-50, 25));
             break;
+        case 9:
+            vertices.push_back(sf::Vector2i(0, -25));
+            vertices.push_back(sf::Vector2i(50, 0));
+            vertices.push_back(sf::Vector2i(0, 25));
+            vertices.push_back(sf::Vector2i(-50, 25));
+            break;
+        case 10:
+            vertices.push_back(sf::Vector2i(0, 0));
+            vertices.push_back(sf::Vector2i(50, 0));
+            vertices.push_back(sf::Vector2i(0, 25));
+            vertices.push_back(sf::Vector2i(-50, 0));
+            break;
+        case 11:
+            vertices.push_back(sf::Vector2i(0, -25));
+            vertices.push_back(sf::Vector2i(50, 25));
+            vertices.push_back(sf::Vector2i(0, 25));
+            vertices.push_back(sf::Vector2i(-50, 0));
+            break;
+        case 12:
+            vertices.push_back(sf::Vector2i(0, -25));
+            vertices.push_back(sf::Vector2i(50, 0));
+            vertices.push_back(sf::Vector2i(0, 50));
+            vertices.push_back(sf::Vector2i(-50, 0));
+            break;
         default: 
             break;
     } 
@@ -195,14 +268,15 @@ std::vector<sf::Vector2i> BattlefieldMap::getVertices(int x, int y)
     return vertices;
 }
 
+// Add TerrainTypes to this destructor
 BattlefieldMap::~BattlefieldMap()
 {
     for (int i = 0; i < size; i++) {
         delete[] depthMap[i];
         delete[] directionMap[i];
-        delete[] spriteMap[i];
+        delete[] terrainMap[i];
     }
     delete[] depthMap;
     delete[] directionMap;
-    delete[] spriteMap;
+    delete[] terrainMap;
 }
