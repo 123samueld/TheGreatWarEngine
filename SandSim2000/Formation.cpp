@@ -4,14 +4,15 @@ void Formation::Update()
 {
     // Formations don't need to update every iteration of the main loop so we can reduce their cost
     // by throttling based on time.
-
     auto now = std::chrono::steady_clock::now();
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTime) >= updateInterval)
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - data.lastUpdateTime);
+
+    if (elapsed >= data.updateInterval)
     {
         // Call other methods from here.
 
         // Update the last update time
-        lastUpdateTime = now;
+        data.lastUpdateTime = now;
     }
 }
 
@@ -83,4 +84,26 @@ void Formation::formVectorField()
     // The VectorField is very similar to the GhostGrid except that it updates every waypoint step,
     // and not all cells are added only new ones. The int direction property will be used to calculate which
     // set of BattlefieldCells will be the next ones added to the VectorField.
+
+    // Use setVectorfieldDirectionElement() here.
+}
+
+void Formation::setVectorfieldDirectionElement(uint8_t row, uint8_t col, uint8_t direction)
+{
+    int index = row * data.vectorFieldWidth + col;
+    if (index < data.vectorField.size())
+    {
+        data.vectorField[index] = direction;
+    }
+}
+
+const uint8_t Formation::getVectorfieldDirectionElement(uint8_t row, uint8_t col)
+{
+    int index = row * data.vectorFieldWidth + col;
+    if (index < data.vectorField.size())
+    {
+        return data.vectorField[index];
+    }
+    // Handle out-of-bounds access as needed (e.g., throw an exception, return a default value, etc.)
+    return 0;  // Default value or error handling
 }

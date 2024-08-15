@@ -1,91 +1,94 @@
+
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include <chrono>
+#include <vector>
+#include <iostream>
+#include <cstdint>
+#include <array>
 
-#include "Agent.h"
-
-
-enum class BehaviorState
+enum class BehaviorState : uint8_t
 {
     Idle,
     Seek,
     Arrive
+};
 
-    // Persue
-    // 
-    // Patrol
+struct FormationData
+{
+    // Grouping 8-byte aligned members first
+    std::chrono::steady_clock::time_point lastUpdateTime;  // 8 bytes, A8
+    std::chrono::milliseconds updateInterval;              // 8 bytes, A8
+
+    // Grouping other members with natural alignments next
+    std::vector<uint8_t> pathToFollow;                 // 24 bytes, A8
+    std::array<uint8_t, 256> vectorField;               // 256 bytes, A1
+
+    // Grouping smaller members at the end to minimize padding
+    bool isSelected;              // 1 byte, A1
+    BehaviorState behaviorState;  // 1 byte, A1
+    uint8_t id;                   // 1 byte, A1
+    uint8_t direction;            // 1 byte, A1
+    uint8_t radius;               // 1 byte, A1
+    uint8_t speed;                // 1 byte, A1
+    uint8_t posX;                 // 1 byte, A1
+    uint8_t posY;                 // 1 byte, A1
+    uint8_t vectorFieldWidth;     // 1 byte, A1
+    uint8_t vectorFieldHeight;    // 1 byte, A1
+
+    FormationData(
+        bool isSelected = false,
+        BehaviorState behaviorState = BehaviorState::Idle,
+        uint8_t id = 0,
+        uint8_t direction = 0,
+        uint8_t radius = 0,
+        uint8_t speed = 0,
+        uint8_t posX = 0,
+        uint8_t posY = 0,
+        uint8_t vectorFieldWidth = 16,
+        uint8_t vectorFieldHeight = 16,
+        std::chrono::milliseconds updateInterval = std::chrono::milliseconds(100),
+        const std::vector<uint8_t>& pathToFollow = {},
+        const std::array<uint8_t, 256>& vectorField = {})
+        :
+        isSelected(isSelected),
+        behaviorState(behaviorState),
+        id(id),
+        direction(direction),
+        radius(radius),
+        speed(speed),
+        posX(posX),
+        posY(posY),
+        vectorFieldWidth(vectorFieldWidth),
+        vectorFieldHeight(vectorFieldHeight),
+        lastUpdateTime(std::chrono::steady_clock::now()),
+        updateInterval(updateInterval),
+        pathToFollow(pathToFollow),
+        vectorField(vectorField)
+    {
+    }
 };
 
 class Formation
 {
 public:
-    int id;
-    bool isSelected; // For now there will only be 1 formation so initialise it to selected
-    sf::Vector2f position;
-    int direction;
-    BehaviorState behaviorState;
-    float radius;
-    float speed;
-    std::vector<std::vector<sf::Vector2f>> vectorField;
-    std::vector<sf::Vector2f> pathToFollow;
-    // Timer
-    std::chrono::steady_clock::time_point lastUpdateTime;
-    std::chrono::milliseconds updateInterval;
+    FormationData data;
 
+    Formation() : data() {}
 
-    // Constructor
-    Formation(
-        int id,
-        bool isSelected,
-        sf::Vector2f position,
-        int direction,
-        BehaviorState behaviorState,
-        float radius,
-        float speed,
-        const std::vector<std::vector<sf::Vector2f>>& vectorField,
-        const std::vector<sf::Vector2f>& pathToFollow,
-        int numberOfBoids,
-        int sizeOfLargestBoid,
-        float maximumSpeedOfSlowestBoid,
-        std::chrono::milliseconds interval = std::chrono::milliseconds(100)
-    ) :
-        id(id),
-        isSelected(isSelected),
-        position(position),
-        direction(direction),
-        behaviorState(behaviorState),
-        radius(radius),
-        speed(speed),
-        vectorField(vectorField),
-        pathToFollow(pathToFollow),
-        // numberOfBoids(numberOfBoids),
-        // sizeOfLargestBoid(sizeOfLargestBoid),
-        // maximumSpeedOfSlowestBoid(maximumSpeedOfSlowestBoid)
-        updateInterval(interval)
-    {
-        lastUpdateTime = std::chrono::steady_clock::now();
-    }
-
+    Formation(const FormationData& formationData) : data(formationData) {}
 
     void Update();
-    bool canPathCheck();
     void repath();
     void identifyNextWaypoint();
+    bool canPathCheck();
     void stepToNextWaypoint();
-
     void calculateDirection();
     void updateBehaviorState();
-
-
-
-    // Properties & Methods for Later
-    //int numberOfBoids;
-    //int sizeOfLargestBoid;
-    //float maximumSpeedOfSlowestBoid;
-
     void formVectorField();
+    void setVectorfieldDirectionElement(uint8_t row, uint8_t col, uint8_t direction);
+    const uint8_t getVectorfieldDirectionElement(uint8_t row, uint8_t col);
     void calculateRadius();
     bool collisionLineCheck();
     bool collisionRadiusCheck();
