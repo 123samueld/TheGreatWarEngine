@@ -19,6 +19,7 @@
 #include "PathfinderAgent.h"
 #include "MobileAgent.h"
 #include "MovementManager.h"
+#include "Formation.h"
 
 class AgentManager
 {
@@ -32,8 +33,11 @@ public:
 
 	void placeScenery(sf::Vector2i isometricCell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, Scenery scenObject, GameStateManager& gameStateManager);
 	void placeAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, Agent agent, GameStateManager& gameStateManager);
-	void placeMobileAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, MobileAgent agent, GameStateManager& gameStateManager);
-	void placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, PathfinderAgent agent, GameStateManager& gameStateManager);
+	//void placeMobileAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, MobileAgent agent, GameStateManager& gameStateManager);
+	//void placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, PathfinderAgent agent, GameStateManager& gameStateManager);
+
+	//Add this new method. 
+    void initialiseFormations(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gamesScene, GameStateManager& gameStateManager, Formation formation);
 
 	void loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager);
 

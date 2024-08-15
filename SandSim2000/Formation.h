@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <SFML/Graphics.hpp>
@@ -9,6 +8,7 @@
 #include <array>
 
 enum class BehaviorState : uint8_t
+
 {
     Idle,
     Seek,
