@@ -8,6 +8,7 @@ void Formation::Update()
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - data.lastUpdateTime);
 
     if (elapsed >= data.updateInterval)
+
     {
         // Call other methods from here.
 
@@ -85,6 +86,7 @@ void Formation::formVectorField()
     // and not all cells are added only new ones. The int direction property will be used to calculate which
     // set of BattlefieldCells will be the next ones added to the VectorField.
 
+
     // Use setVectorfieldDirectionElement() here.
 }
 
@@ -107,3 +109,4 @@ const uint8_t Formation::getVectorfieldDirectionElement(uint8_t row, uint8_t col
     // Handle out-of-bounds access as needed (e.g., throw an exception, return a default value, etc.)
     return 0;  // Default value or error handling
 }
+
