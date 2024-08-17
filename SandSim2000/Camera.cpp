@@ -6,6 +6,13 @@ Camera::Camera()
     window.setVerticalSyncEnabled(true);
     window.setMouseCursorGrabbed(true);
 
+    if (!grayShader.loadFromFile("../resources/shaders/renderShaders/grayscale.frag", sf::Shader::Fragment)) {
+        // Log the error
+        std::cerr << "Error: Failed to load grayscale shader from file." << std::endl;
+
+        // Throw an exception to indicate that the shader failed to load
+        throw std::runtime_error("Failed to load grayscale shader");
+    }
     screenSize = window.getSize();
     offsetX = - (screenSize.x / 2.0f);
     offsetY = -(screenSize.y / 2.0f);
@@ -124,17 +131,21 @@ void Camera::snapPan(const InputState& inputState)
     //Once there are scenery and units on the battlefield, snap panning should be done via hotkeys, snapping the camera to the position of a unit.
 }
 
-void Camera::Draw(std::vector<sf::Sprite>& sprites, const InputState& inputState)
+void Camera::Draw(std::vector<DrawableSprite>& sprites, const InputState& inputState)
 {
     window.clear(sf::Color::White);
     int centerOffsetX = window.getSize().x / 2;
     sf::Vector2f position;
     for (auto& sprite : sprites)
     {
-        position = sprite.getPosition();
+        position = sprite.sprite.getPosition();
         WorldToScreen(position.x + centerOffsetX, position.y, screenX, screenY);
-        sprite.setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
-        window.draw(sprite);
+        sprite.sprite.setPosition(static_cast<float>(screenX), static_cast<float>(screenY));
+
+        if(sprite.inFoW)
+            window.draw(sprite.sprite);
+        else
+            window.draw(sprite.sprite, &grayShader);
     }
 
     ScreenToWorld(inputState.mousePosition.x - (window.getSize().x / 2) - 50, inputState.mousePosition.y - 100, worldX, worldY);

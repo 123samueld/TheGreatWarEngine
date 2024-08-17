@@ -44,7 +44,7 @@ int main()
         if (!camera.Update(inputState))
             break;
         scene.UpdateGameScene(camera, gameStateManager.getState(), inputState);
-        std::vector<sf::Sprite> spriteMap = scene.buildGameScene(&animationManager);
+        std::vector<DrawableSprite> spriteMap = scene.buildGameScene(&animationManager);
         camera.Draw(spriteMap, inputState);
     }
     return 0;

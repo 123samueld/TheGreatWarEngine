@@ -3,7 +3,6 @@
 #define TILE_SIZE 100
 const size_t SPRITE_POOL_SIZE = 1300;
 
-
 void Scene::UpdateGameScene(Camera& cam, GameState& gameState, InputState& inputState)
 {
     sf::IntRect viewbounds(-GlobalConstants::cellSize, 0, cam.window.getSize().x + GlobalConstants::cellSize,
@@ -87,9 +86,9 @@ sf::Sprite& Scene::getOrCreateSprite()
     return spritePool[spritePoolIndex++];
 }
 
-std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager)
+std::vector<DrawableSprite> Scene::buildGameScene(AnimationManager* animationManager)
 {
-    std::vector<sf::Sprite> sprites;
+    std::vector<DrawableSprite> sprites;
     std::unordered_map<std::string, SpriteSheet*> spriteSheetsCache;
 
     // Initialize sprite pool if empty
@@ -122,15 +121,21 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
             terrainSprite.setTexture(spriteSheet->texture);
             terrainSprite.setScale(scaleX, scaleY);
 
+
+
             sf::Vector2f isometricPosition =
                 gridGenerator.cartesianToIsometricTransform(sf::Vector2f(currentCell.x, currentCell.y));
             terrainSprite.setPosition(isometricPosition.x, isometricPosition.y - currentCell.YOffset);
             terrainSprite.setColor(sf::Color(255, 255, 255, 255 / static_cast<int>(terrainTypes.size())));
 
-            sprites.push_back(terrainSprite);
+			DrawableSprite s;
+			s.sprite = terrainSprite;
+			s.inFoW = currentCell.FoW;
+
+            sprites.push_back(s);
         }
 
-        if (!currentCell.Objects.empty())
+        if (!currentCell.Objects.empty() && currentCell.FoW)
         {
             for (Agent* currentAgent : currentCell.Objects)
             {
@@ -146,7 +151,11 @@ std::vector<sf::Sprite> Scene::buildGameScene(AnimationManager* animationManager
                     sf::Vector2f(currentAgent->getPosX(), currentAgent->getPosY()));
                 objectSprite.setPosition(isometricPosition.x, isometricPosition.y - currentAgent->agentHeightAxis);
 
-                sprites.push_back(objectSprite);
+				DrawableSprite s;
+				s.sprite = objectSprite;
+				s.inFoW = true;
+
+                sprites.push_back(s);
             }
         }
     }

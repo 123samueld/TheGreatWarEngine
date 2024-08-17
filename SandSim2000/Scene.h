@@ -13,13 +13,14 @@
 #include "GridGenerator.h"
 #include "InputState.h"
 #include "GlobalConstants.h"
+#include "DrawableSprite.h"
 
 class Scene {
 public:
     Scene(GridGenerator& gridGen) : gridGenerator(gridGen) {} 
 
     void UpdateGameScene(Camera& cam, GameState& gameState, InputState& inputState);
-	std::vector<sf::Sprite> buildGameScene(AnimationManager* animationManager);
+	std::vector<DrawableSprite> buildGameScene(AnimationManager* animationManager);
 	sf::Vector2i getScreenPositionOfCell(const BattlefieldCell& cell, Camera& cam, GridGenerator& gridGenerator);
 	void getBattlefieldCellFromMouseClick(Camera& cam, GridGenerator& gridGenerator, InputState& inputState);
 

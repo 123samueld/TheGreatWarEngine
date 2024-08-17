@@ -170,6 +170,7 @@
     <ClInclude Include="BattlefieldCell.h" />
     <ClInclude Include="BattlefieldMap.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DrawableSprite.h" />
     <ClInclude Include="Formation.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />

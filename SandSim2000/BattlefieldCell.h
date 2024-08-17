@@ -34,6 +34,10 @@ public:
     bool impassableTerrain = false;
     bool inClosedList = false;
 
+    // FoW - False is a hidden cell
+    // FoW - True is a shown cell
+    bool FoW = false;
+
     int gScore = 0;
     int hScore = 0;
     int fScore = 0;
