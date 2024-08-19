@@ -18,6 +18,8 @@ void AgentManager::onUpdate(
     Scene& scene)
 {
 
+    fowManager.UpdateFogOfWarState(gameStateManager);
+
     if (pathfinderAgent != nullptr)
     {
         pathfinderAgent->update();

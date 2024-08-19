@@ -52,4 +52,5 @@ public:
     bool isMobileAgent = false;
 
     float agentHeightAxis = 0;
+    unsigned int revealRange = 2;
 };

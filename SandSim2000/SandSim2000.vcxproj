@@ -147,6 +147,7 @@
     <ClCompile Include="BattlefieldMap.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Formation.cpp" />
+    <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GridGenerator.cpp" />
     <ClCompile Include="Infantry.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DrawableSprite.h" />
     <ClInclude Include="Formation.h" />
+    <ClInclude Include="FoWManager.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="GhostGrid.h" />

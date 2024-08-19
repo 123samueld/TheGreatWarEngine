@@ -20,6 +20,7 @@
 #include "MobileAgent.h"
 #include "MovementManager.h"
 #include "Formation.h"
+#include "FoWManager.h"
 
 class AgentManager
 {
@@ -48,5 +49,6 @@ private:
 	bool rightClick = false;
 
 	MovementManager movementManager;
+	FoWManager fowManager;
 	GlobalConstants constants;
 };
