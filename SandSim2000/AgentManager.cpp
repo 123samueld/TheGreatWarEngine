@@ -34,6 +34,10 @@ void AgentManager::onUpdate(
             mobileAgent[i]->update(&gameStateManager);
     }
 
+    if (state.isLeftMouseButtonPressed && leftClick == false)
+    {
+        placeScenery(sf::Vector2i(state.selectedCell.x, state.selectedCell.y), gameScene, Tree(state.selectedCell.x, state.selectedCell.y), gameStateManager);
+    }
     if (state.isLeftMouseButtonPressed && leftClick == false && pathfinderAgent != nullptr)
     {
         GameState& gamestate = gameStateManager.getState();
