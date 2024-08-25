@@ -21,7 +21,7 @@ protected:
     sf::Vector2i currentDirection = sf::Vector2i(-1,0);
 
 public:
-    Agent(float initialPosX, float initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, bool directional, std::string basicUnitType);
+    Agent(float initialPosX, float initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, bool directional, bool friendlyUnit, std::string basicUnitType);
     virtual ~Agent();
 
     void takeDamage(int damage);
@@ -52,5 +52,6 @@ public:
     bool isMobileAgent = false;
 
     float agentHeightAxis = 0;
-    unsigned int revealRange = 2;
+    unsigned int revealRange = 4;
+    bool friendly = false;
 };

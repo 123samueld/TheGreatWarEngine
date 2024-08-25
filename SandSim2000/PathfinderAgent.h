@@ -6,7 +6,7 @@
 class PathfinderAgent : public Agent
 {
 public:
-	PathfinderAgent(int initialPosX, int initialPosY, sf::String unit) :Agent(initialPosX, initialPosY, -1, -1, -1, -1, true, unit) { isPathfinderAgent = true; };
+	PathfinderAgent(int initialPosX, int initialPosY, sf::String unit) :Agent(initialPosX, initialPosY, -1, -1, -1, -1, true, false, unit) { isPathfinderAgent = true; };
 
 	void setStartingCell(BattlefieldCell* startingCell) { current = startingCell; }
 	void setPath(std::vector<BattlefieldCell*>* TargetPath);

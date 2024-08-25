@@ -25,13 +25,11 @@ int main()
     // agentManager.initialiseFormations(args);
     
     
-    // Obsolete MkI methods.
-    /*
     agentManager.placePathfinderAgent(sf::Vector2i(2, 2), &scene.gameScene, PathfinderAgent(2, 2, "PathfinderAgent"), gameStateManager);
-    int numberOfAgents = 400;
+    int numberOfAgents = 50;
     for(int i = 0; i < numberOfAgents; i++)
-        agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2, 1, 1, 0.1f, 1, "RedBaron"), gameStateManager);
-    */
+        agentManager.placeMobileAgent(sf::Vector2i(2, 2), &scene.gameScene, MobileAgent(2 , 2, 1, 1, 0.1f, 1, true, "RedBaron"), gameStateManager);
+    
 
     while (camera.window.isOpen())
     {
