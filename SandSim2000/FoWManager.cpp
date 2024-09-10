@@ -4,7 +4,7 @@
 
 void FoWManager::UpdateFogOfWarState(GameStateManager& gamestateManager)
 {
-	ResetFogOfWarState(gamestateManager);
+	//ResetFogOfWarState(gamestateManager);
 
 	for (Agent* a : gamestateManager.getState().Units)
 	{
@@ -27,3 +27,4 @@ void FoWManager::ResetFogOfWarState(GameStateManager& gamestateManager)
 	for (BattlefieldCell& cell : gamestateManager.state.BattlefieldVector)
 		cell.FoW = false;
 }
+ 
