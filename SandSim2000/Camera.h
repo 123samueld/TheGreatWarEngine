@@ -8,14 +8,14 @@
 #include "InputStateManager.h"
 #include "InputState.h"
 #include "BattlefieldCell.h"
-
+#include "DrawableSprite.h"
 
 class Camera { 
 public:
     Camera();
 
     bool Update(InputState& state);
-    void Draw(std::vector<sf::Sprite>& sprites, const InputState& state);
+    void Draw(std::vector<DrawableSprite>& sprites, const InputState& state);
 
     void WorldToScreen(float worldX, float worldY, int& outScreenX, int& outScreenY);
     void ScreenToWorld(int screenX, int screenY, float& outWorldX, float& outWorldY);
@@ -34,6 +34,7 @@ public:
     sf::Vector2f selectedCell;
 private:
     sf::View view;
+    sf::Shader grayShader;
 
     bool mouseButtonPanning = false;
     bool edgePanning = false;

@@ -1,7 +1,7 @@
 #include "Agent.h"
 
-Agent::Agent(float initialPosX, float initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, bool directional, std::string basicUnitType)
-    : posX(initialPosX), posY(initialPosY), health(initialHealth), armour(initialArmour), speed(initialSpeed), ballisticSkill(initialBallisticSkill), directionalSprite(directional), unitType(basicUnitType) {
+Agent::Agent(float initialPosX, float initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, bool directional, bool friendlyUnit, std::string basicUnitType)
+    : posX(initialPosX), posY(initialPosY), health(initialHealth), armour(initialArmour), speed(initialSpeed), ballisticSkill(initialBallisticSkill), directionalSprite(directional), friendly(friendlyUnit), unitType(basicUnitType) {
 }
 
 

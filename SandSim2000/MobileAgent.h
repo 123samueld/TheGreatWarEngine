@@ -13,7 +13,7 @@
 class MobileAgent : public Agent
 {
 public:
-	MobileAgent(int initialPosX, int initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, sf::String basicUnitType) : Agent(initialPosX, initialPosY, initialHealth, initialArmour, initialSpeed, initialBallisticSkill, true, basicUnitType) { lastCellPosition = sf::Vector2i(initialPosX, initialPosY); isMobileAgent = true; }
+	MobileAgent(int initialPosX, int initialPosY, int initialHealth, int initialArmour, float initialSpeed, int initialBallisticSkill, bool isFriendly, sf::String basicUnitType) : Agent(initialPosX, initialPosY, initialHealth, initialArmour, initialSpeed, initialBallisticSkill, true, isFriendly, basicUnitType) { lastCellPosition = sf::Vector2i(initialPosX, initialPosY); isMobileAgent = true; }
 
 	void update(GameStateManager* gameStateManager);
 private:

@@ -18,6 +18,8 @@ void AgentManager::onUpdate(
     Scene& scene)
 {
 
+    fowManager.UpdateFogOfWarState(gameStateManager);
+
     if (pathfinderAgent != nullptr)
     {
         pathfinderAgent->update();
@@ -76,7 +78,7 @@ void AgentManager::placeAgent(sf::Vector2i cell, std::set<std::vector<Battlefiel
     gameStateManager.getState().Units.push_back(newAgent);
     gameStateManager.getState().quadTree->insert(newAgent, constants.cellSize);
 }
-/*
+
 void AgentManager::placeMobileAgent(sf::Vector2i cell, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, MobileAgent agent, GameStateManager& gameStateManager)
 {
     MobileAgent* newAgent = new MobileAgent(agent);
@@ -101,7 +103,7 @@ void AgentManager::placePathfinderAgent(sf::Vector2i cell, std::set<std::vector<
     pathfinderAgent = newAgent;
     pathfinderAgent->current = currentCell;
 }
-*/
+
 void AgentManager::loadAgentsFromMap(const char* filepath, std::set<std::vector<BattlefieldCell>::iterator>* gameScene, GameStateManager& gameStateManager)
 {
     std::ifstream mapDataFile(filepath);
